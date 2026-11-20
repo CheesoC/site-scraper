@@ -109,6 +109,7 @@ class PageCrawler:
                 for worker in workers:
                     worker.cancel()
                 await asyncio.gather(*workers, return_exceptions=True)
+        self._promote_home()
         self.state.finished_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
         return self.state
 
@@ -219,6 +220,33 @@ class PageCrawler:
                 out.append(target)
             self._enqueue(queue, link_url, depth + 1, path)
         return out
+
+    def _promote_home(self) -> None:
+        """Make sure the archive has a home page "/".
+
+        Without a real page at "/", the page the root redirects to (alias "/") becomes "/";
+        if the root was not reachable at all, the start URL's page does. Its old path stays as an alias.
+        """
+        state = self.state
+        if "/" in state.pages or not state.pages:
+            return
+        target = state.aliases.get("/")
+        if target not in state.pages:
+            start = self.normalizer.to_path(self.normalizer.start_url)
+            start = state.aliases.get(start, start)
+            target = start if start in state.pages else None
+        if target is None:
+            return
+        page = state.pages.pop(target)
+        page.path = "/"
+        state.pages = {"/": page, **state.pages}
+        state.aliases.pop("/", None)
+        for alias, dest in state.aliases.items():
+            if dest == target:
+                state.aliases[alias] = "/"
+        state.aliases[target] = "/"
+        page.aliases = sorted({alias for alias in page.aliases if alias != "/"} | {target})
+        log.info("home page: %s -> /", target)
 
     def _add_alias(self, alias: str, target: str) -> None:
         if alias == target or alias in self.state.pages:

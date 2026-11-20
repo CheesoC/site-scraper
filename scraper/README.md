@@ -74,7 +74,7 @@ python -m scraper validate ./outputs/example-source
 ## Ablauf
 
 1. **URLDiscovery** (`discovery.py`) liest `robots.txt` (Regeln, `Crawl-delay`, Sitemap-Einträge). Dazu kommen `/sitemap.xml`, Sitemap-Indizes, gz-komprimierte und Text-Sitemaps.
-2. **PageCrawler** (`crawler.py`) crawlt per Breitensuche ab der Start-URL und den Sitemap-URLs. Er hält sich an Tiefe, Seitenlimit, Domains und robots.txt. Duplikate erkennt er über den normalisierten Pfad, Weiterleitungen, Canonical-Links und Query-Varianten mit gleichem Inhalt.
+2. **PageCrawler** (`crawler.py`) crawlt per Breitensuche ab der Start-URL und den Sitemap-URLs. Er hält sich an Tiefe, Seitenlimit, Domains und robots.txt. Duplikate erkennt er über den normalisierten Pfad, Weiterleitungen, Canonical-Links und Query-Varianten mit gleichem Inhalt. Gibt es danach keine Seite `/`, wird die Seite, auf die die Wurzel weiterleitet (sonst die Start-URL), zur Startseite `/`. Ihr alter Pfad bleibt als Alias erhalten.
 3. **Fetcher** (`fetchers.py`) rendert die Seiten:
    - Crawl4AI/Playwright scrollt für Lazy Loading, öffnet `<details>` und markiert berechnete CSS-Hintergrundbilder.
    - Alternativ holt httpx die Seiten ohne JavaScript.
