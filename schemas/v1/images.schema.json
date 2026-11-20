@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-scraper.local/schemas/v1/images.schema.json",
+  "title": "Image registry (assets/images.json) and per-page image list (pages/*/images.json)",
+  "oneOf": [{ "$ref": "#/$defs/registry" }, { "$ref": "#/$defs/pageImages" }],
+  "$defs": {
+    "registry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "assets"],
+      "properties": {
+        "schemaVersion": { "const": "1.0" },
+        "kind": { "const": "registry" },
+        "assets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "file", "originalUrls", "sha256"],
+            "properties": {
+              "id": { "type": "string" },
+              "file": { "type": "string", "description": "Archive-relative path, e.g. assets/images/1a2b3c4d-logo.svg" },
+              "originalUrls": { "type": "array", "items": { "type": "string" } },
+              "contentType": { "type": ["string", "null"] },
+              "bytes": { "type": "integer", "minimum": 0 },
+              "sha256": { "type": "string" },
+              "width": { "type": ["integer", "null"] },
+              "height": { "type": ["integer", "null"] },
+              "pages": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "pageImages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "path", "images"],
+      "properties": {
+        "schemaVersion": { "const": "1.0" },
+        "kind": { "const": "page" },
+        "path": { "type": "string" },
+        "images": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["originalUrl", "src", "alt", "order"],
+            "properties": {
+              "originalUrl": { "type": "string" },
+              "src": { "type": ["string", "null"] },
+              "assetId": { "type": ["string", "null"] },
+              "alt": { "type": "string" },
+              "caption": { "type": ["string", "null"] },
+              "sectionId": { "type": ["string", "null"] },
+              "blockIndex": { "type": ["integer", "null"] },
+              "order": { "type": "integer", "minimum": 0 },
+              "role": { "enum": ["content", "background", "logo", "icon", "og"] }
+            }
+          }
+        }
+      }
+    }
+  }
+}

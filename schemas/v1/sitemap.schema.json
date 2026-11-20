@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-scraper.local/schemas/v1/sitemap.schema.json",
+  "title": "Page tree and link graph (sitemap.json)",
+  "type": "object",
+  "required": ["schemaVersion", "tree", "links"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "tree": { "$ref": "#/$defs/node" },
+    "links": {
+      "type": "object",
+      "description": "Outgoing internal links per page path",
+      "additionalProperties": { "type": "array", "items": { "type": "string" } }
+    }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "segment", "exported", "children"],
+      "properties": {
+        "path": { "type": "string" },
+        "segment": { "type": "string" },
+        "title": { "type": ["string", "null"] },
+        "exported": { "type": "boolean", "description": "false for intermediate path segments without an own page" },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/node" } }
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-scraper.local/schemas/v1/manifest.schema.json",
+  "title": "Archive manifest (manifest.json)",
+  "type": "object",
+  "required": ["schemaVersion", "sourceUrl", "pages"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "sourceUrl": { "type": "string" },
+    "crawledAt": { "type": ["string", "null"], "format": "date-time" },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": { "name": { "type": "string" }, "version": { "type": "string" } }
+    },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": ["string", "null"] },
+        "lang": { "type": ["string", "null"] },
+        "homePath": { "type": "string" }
+      }
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "navigation": { "type": "string" },
+        "sitemap": { "type": "string" },
+        "assets": { "type": "string" },
+        "report": { "type": "string" }
+      }
+    },
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "content"],
+        "properties": {
+          "path": { "$ref": "page.schema.json#/$defs/path" },
+          "title": { "type": ["string", "null"] },
+          "originalUrl": { "type": ["string", "null"] },
+          "finalUrl": { "type": ["string", "null"] },
+          "normalizedUrl": { "type": ["string", "null"] },
+          "canonical": { "type": ["string", "null"] },
+          "aliases": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Other original paths (e.g. redirects, .html variants) that resolve to this page"
+          },
+          "dir": { "type": "string" },
+          "content": { "type": "string", "description": "Archive-relative path of content.json" },
+          "markdown": { "type": ["string", "null"] },
+          "html": { "type": ["string", "null"] },
+          "images": { "type": ["string", "null"] },
+          "depth": { "type": "integer", "minimum": 0 },
+          "status": { "type": ["integer", "null"] }
+        }
+      }
+    }
+  }
+}

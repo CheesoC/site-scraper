@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-scraper.local/schemas/v1/navigation.schema.json",
+  "title": "Site navigation (navigation.json)",
+  "type": "object",
+  "required": ["schemaVersion", "main", "footer", "menus"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "main": { "type": "array", "items": { "$ref": "#/$defs/navItem" }, "description": "Primary menu (copy of the menu with type 'main')" },
+    "footer": { "type": "array", "items": { "$ref": "#/$defs/navItem" }, "description": "Footer links; groups have url=null and children" },
+    "logo": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["href", "external"],
+          "properties": {
+            "href": { "type": "string" },
+            "path": { "type": ["string", "null"] },
+            "external": { "type": "boolean" },
+            "label": { "type": ["string", "null"] },
+            "image": { "type": ["string", "null"], "description": "Local asset path" },
+            "imageUrl": { "type": ["string", "null"] },
+            "alt": { "type": ["string", "null"] }
+          }
+        }
+      ]
+    },
+    "cta": { "type": "array", "items": { "$ref": "#/$defs/navItem" } },
+    "menus": { "type": "array", "items": { "$ref": "#/$defs/menu" }, "description": "All detected menus, in DOM order" }
+  },
+  "$defs": {
+    "navType": { "enum": ["main", "footer", "secondary", "mobile", "utility", "cta", "breadcrumb", "logo"] },
+    "navItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["label", "url", "path", "external", "order", "depth", "children"],
+      "properties": {
+        "label": { "type": "string" },
+        "url": { "type": ["string", "null"], "description": "Absolute original URL; null for pure group headings" },
+        "path": { "type": ["string", "null"], "description": "Normalized internal path (may include #fragment); null for external links/groups" },
+        "external": { "type": "boolean" },
+        "order": { "type": "integer", "minimum": 0 },
+        "depth": { "type": "integer", "minimum": 0 },
+        "type": { "$ref": "#/$defs/navType" },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/navItem" } }
+      }
+    },
+    "menu": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "items", "ambiguous"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "$ref": "#/$defs/navType" },
+        "label": { "type": ["string", "null"] },
+        "selector": { "type": ["string", "null"], "description": "Where the menu was found in the DOM" },
+        "ambiguous": { "type": "boolean", "description": "true if the hierarchy could not be determined reliably (flat list as found)" },
+        "pages": { "type": "integer", "description": "Number of pages this menu appeared on" },
+        "items": { "type": "array", "items": { "$ref": "#/$defs/navItem" } }
+      }
+    }
+  }
+}

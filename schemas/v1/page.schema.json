@@ -1,0 +1,362 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-scraper.local/schemas/v1/page.schema.json",
+  "title": "Page content (content.json)",
+  "type": "object",
+  "required": ["schemaVersion", "path", "url", "title", "meta", "sections"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "path": { "$ref": "#/$defs/path" },
+    "url": { "type": "string", "format": "uri" },
+    "title": { "type": "string" },
+    "meta": { "$ref": "#/$defs/meta" },
+    "breadcrumbs": {
+      "type": "array",
+      "items": { "$ref": "navigation.schema.json#/$defs/navItem" }
+    },
+    "sections": { "type": "array", "items": { "$ref": "#/$defs/section" } }
+  },
+  "$defs": {
+    "path": {
+      "description": "Normalized site path. Starts with '/', no trailing slash (except root), no query or fragment.",
+      "type": "string",
+      "pattern": "^/([^?#\\s]*[^/?#\\s])?$"
+    },
+    "linkTarget": {
+      "description": "Internal links carry a resolvable path (optionally with #fragment); external links only href.",
+      "type": "object",
+      "properties": {
+        "href": { "type": "string" },
+        "path": { "type": ["string", "null"], "pattern": "^/" },
+        "external": { "type": "boolean" }
+      },
+      "required": ["href", "external"]
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": ["string", "null"] },
+        "description": { "type": ["string", "null"] },
+        "canonical": { "type": ["string", "null"] },
+        "lang": { "type": ["string", "null"] },
+        "h1": { "type": ["string", "null"] },
+        "robots": { "type": ["string", "null"] },
+        "og": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "title": { "type": ["string", "null"] },
+            "description": { "type": ["string", "null"] },
+            "image": { "type": ["string", "null"], "description": "Local asset path if downloaded" },
+            "imageUrl": { "type": ["string", "null"], "description": "Original image URL" },
+            "type": { "type": ["string", "null"] },
+            "url": { "type": ["string", "null"] }
+          }
+        },
+        "structuredData": { "type": "array", "items": {} }
+      }
+    },
+    "mark": { "enum": ["bold", "italic", "underline", "strike", "code", "sub", "sup", "mark"] },
+    "inline": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "text"],
+          "properties": {
+            "type": { "const": "text" },
+            "text": { "type": "string" },
+            "marks": { "type": "array", "items": { "$ref": "#/$defs/mark" }, "uniqueItems": true }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "href", "external", "children"],
+          "properties": {
+            "type": { "const": "link" },
+            "href": { "type": "string" },
+            "path": { "type": ["string", "null"] },
+            "external": { "type": "boolean" },
+            "title": { "type": ["string", "null"] },
+            "children": { "type": "array", "items": { "$ref": "#/$defs/inline" } }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": { "type": { "const": "break" } }
+        }
+      ]
+    },
+    "richText": { "type": "array", "items": { "$ref": "#/$defs/inline" } },
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "src", "originalSrc", "alt"],
+      "properties": {
+        "type": { "const": "image" },
+        "src": {
+          "type": ["string", "null"],
+          "description": "Archive-relative local path (assets/images/...) or null if the download failed/was disabled"
+        },
+        "originalSrc": { "type": "string" },
+        "alt": { "type": "string" },
+        "caption": { "$ref": "#/$defs/richText" },
+        "width": { "type": ["integer", "null"] },
+        "height": { "type": ["integer", "null"] },
+        "link": { "oneOf": [{ "$ref": "#/$defs/linkTarget" }, { "type": "null" }] },
+        "role": { "enum": ["content", "background", "logo", "icon"] }
+      }
+    },
+    "block": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "enum": [
+            "heading", "paragraph", "list", "table", "quote", "image", "gallery", "button",
+            "embed", "code", "divider", "card", "accordion", "form", "html"
+          ]
+        }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "const": "heading" } } }, "then": { "$ref": "#/$defs/headingBlock" } },
+        { "if": { "properties": { "type": { "const": "paragraph" } } }, "then": { "$ref": "#/$defs/paragraphBlock" } },
+        { "if": { "properties": { "type": { "const": "list" } } }, "then": { "$ref": "#/$defs/listBlock" } },
+        { "if": { "properties": { "type": { "const": "table" } } }, "then": { "$ref": "#/$defs/tableBlock" } },
+        { "if": { "properties": { "type": { "const": "quote" } } }, "then": { "$ref": "#/$defs/quoteBlock" } },
+        { "if": { "properties": { "type": { "const": "image" } } }, "then": { "$ref": "#/$defs/image" } },
+        { "if": { "properties": { "type": { "const": "gallery" } } }, "then": { "$ref": "#/$defs/galleryBlock" } },
+        { "if": { "properties": { "type": { "const": "button" } } }, "then": { "$ref": "#/$defs/buttonBlock" } },
+        { "if": { "properties": { "type": { "const": "embed" } } }, "then": { "$ref": "#/$defs/embedBlock" } },
+        { "if": { "properties": { "type": { "const": "code" } } }, "then": { "$ref": "#/$defs/codeBlock" } },
+        { "if": { "properties": { "type": { "const": "divider" } } }, "then": { "$ref": "#/$defs/dividerBlock" } },
+        { "if": { "properties": { "type": { "const": "card" } } }, "then": { "$ref": "#/$defs/cardBlock" } },
+        { "if": { "properties": { "type": { "const": "accordion" } } }, "then": { "$ref": "#/$defs/accordionBlock" } },
+        { "if": { "properties": { "type": { "const": "form" } } }, "then": { "$ref": "#/$defs/formBlock" } },
+        { "if": { "properties": { "type": { "const": "html" } } }, "then": { "$ref": "#/$defs/htmlBlock" } }
+      ]
+    },
+    "blocks": { "type": "array", "items": { "$ref": "#/$defs/block" } },
+    "headingBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "level", "content"],
+      "properties": {
+        "type": { "const": "heading" },
+        "level": { "type": "integer", "minimum": 1, "maximum": 6 },
+        "content": { "$ref": "#/$defs/richText" },
+        "anchor": { "type": ["string", "null"] }
+      }
+    },
+    "paragraphBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "content"],
+      "properties": {
+        "type": { "const": "paragraph" },
+        "content": { "$ref": "#/$defs/richText" }
+      }
+    },
+    "listBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "ordered", "items"],
+      "properties": {
+        "type": { "const": "list" },
+        "ordered": { "type": "boolean" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["content"],
+            "properties": {
+              "content": { "$ref": "#/$defs/richText" },
+              "blocks": { "$ref": "#/$defs/blocks", "description": "Nested lists or other blocks inside the item" }
+            }
+          }
+        }
+      }
+    },
+    "tableCell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["content"],
+      "properties": {
+        "content": { "$ref": "#/$defs/richText" },
+        "header": { "type": "boolean" },
+        "colspan": { "type": "integer", "minimum": 1 },
+        "rowspan": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "tableBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "rows"],
+      "properties": {
+        "type": { "const": "table" },
+        "caption": { "$ref": "#/$defs/richText" },
+        "head": { "type": "array", "items": { "type": "array", "items": { "$ref": "#/$defs/tableCell" } } },
+        "rows": { "type": "array", "items": { "type": "array", "items": { "$ref": "#/$defs/tableCell" } } }
+      }
+    },
+    "quoteBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "blocks"],
+      "properties": {
+        "type": { "const": "quote" },
+        "blocks": { "$ref": "#/$defs/blocks" },
+        "cite": { "$ref": "#/$defs/richText" }
+      }
+    },
+    "galleryBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "images"],
+      "properties": {
+        "type": { "const": "gallery" },
+        "images": { "type": "array", "items": { "$ref": "#/$defs/image" } }
+      }
+    },
+    "buttonBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "label", "href", "external"],
+      "properties": {
+        "type": { "const": "button" },
+        "label": { "type": "string" },
+        "href": { "type": "string" },
+        "path": { "type": ["string", "null"] },
+        "external": { "type": "boolean" },
+        "variant": { "enum": ["primary", "secondary", "link"] }
+      }
+    },
+    "embedBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "provider", "url"],
+      "properties": {
+        "type": { "const": "embed" },
+        "provider": { "enum": ["youtube", "vimeo", "video", "audio", "map", "iframe"] },
+        "url": { "type": "string" },
+        "title": { "type": ["string", "null"] },
+        "poster": { "type": ["string", "null"] },
+        "width": { "type": ["integer", "null"] },
+        "height": { "type": ["integer", "null"] }
+      }
+    },
+    "codeBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "text"],
+      "properties": {
+        "type": { "const": "code" },
+        "text": { "type": "string" },
+        "language": { "type": ["string", "null"] }
+      }
+    },
+    "dividerBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type"],
+      "properties": { "type": { "const": "divider" } }
+    },
+    "cardBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "blocks"],
+      "properties": {
+        "type": { "const": "card" },
+        "blocks": { "$ref": "#/$defs/blocks" },
+        "link": { "oneOf": [{ "$ref": "#/$defs/linkTarget" }, { "type": "null" }] }
+      }
+    },
+    "accordionBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "items"],
+      "properties": {
+        "type": { "const": "accordion" },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["title", "blocks"],
+            "properties": {
+              "title": { "$ref": "#/$defs/richText" },
+              "blocks": { "$ref": "#/$defs/blocks" }
+            }
+          }
+        }
+      }
+    },
+    "formBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "fields"],
+      "properties": {
+        "type": { "const": "form" },
+        "action": { "type": ["string", "null"] },
+        "method": { "type": ["string", "null"] },
+        "submitLabel": { "type": ["string", "null"] },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "inputType"],
+            "properties": {
+              "name": { "type": "string" },
+              "label": { "type": ["string", "null"] },
+              "inputType": { "type": "string" },
+              "required": { "type": "boolean" },
+              "placeholder": { "type": ["string", "null"] },
+              "options": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "htmlBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "html"],
+      "properties": {
+        "type": { "const": "html" },
+        "html": { "type": "string", "description": "Sanitized HTML fragment (no scripts, styles or event handlers)" },
+        "text": { "type": "string", "description": "Plain text of the fragment" },
+        "reason": { "type": ["string", "null"] }
+      }
+    },
+    "sectionType": {
+      "enum": ["hero", "content", "cards", "faq", "testimonials", "gallery", "cta", "form", "generic"]
+    },
+    "section": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "blocks"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "$ref": "#/$defs/sectionType" },
+        "blocks": { "$ref": "#/$defs/blocks" },
+        "source": {
+          "type": "object",
+          "description": "Hints about the original DOM element (for redesign reference only)",
+          "additionalProperties": false,
+          "properties": {
+            "tag": { "type": "string" },
+            "id": { "type": ["string", "null"] },
+            "classes": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    }
+  }
+}
