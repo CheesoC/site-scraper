@@ -1,0 +1,273 @@
+{
+  "schemaVersion": "1.0",
+  "path": "/",
+  "url": "https://www.beispiel-agentur.de/",
+  "title": "Beispiel Agentur – Webdesign & SEO",
+  "meta": {
+    "title": "Beispiel Agentur – Webdesign & SEO",
+    "description": "Wir gestalten Websites, die gefunden werden.",
+    "canonical": "https://www.beispiel-agentur.de/",
+    "lang": "de",
+    "h1": "Websites, die gefunden werden",
+    "robots": null,
+    "og": {
+      "title": "Beispiel Agentur – Webdesign & SEO",
+      "description": "Wir gestalten Websites, die gefunden werden.",
+      "image": null,
+      "imageUrl": null,
+      "type": "website",
+      "url": "https://www.beispiel-agentur.de/"
+    },
+    "structuredData": []
+  },
+  "sections": [
+    {
+      "id": "hero",
+      "type": "hero",
+      "source": {
+        "tag": "section",
+        "id": "hero",
+        "classes": [
+          "hero"
+        ]
+      },
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 1,
+          "content": [
+            {
+              "type": "text",
+              "text": "Websites, die gefunden werden"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Wir sind eine "
+            },
+            {
+              "type": "text",
+              "text": "unabhängige",
+              "marks": [
+                "italic"
+              ]
+            },
+            {
+              "type": "text",
+              "text": " Agentur für "
+            },
+            {
+              "type": "text",
+              "text": "Webdesign",
+              "marks": [
+                "bold"
+              ]
+            },
+            {
+              "type": "text",
+              "text": " und "
+            },
+            {
+              "type": "link",
+              "href": "https://www.beispiel-agentur.de/leistungen/seo",
+              "path": "/leistungen/seo",
+              "external": false,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "SEO"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "."
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "assets/images/2b080ba6-hero.png",
+          "originalSrc": "https://www.beispiel-agentur.de/media/hero.png",
+          "alt": "Abstrakte Illustration einer Website",
+          "width": 64,
+          "height": 32,
+          "role": "background"
+        },
+        {
+          "type": "button",
+          "label": "Leistungen ansehen",
+          "href": "https://www.beispiel-agentur.de/leistungen",
+          "path": "/leistungen",
+          "external": false,
+          "variant": "primary"
+        }
+      ]
+    },
+    {
+      "id": "features",
+      "type": "cards",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": [
+            {
+              "type": "text",
+              "text": "Unsere Leistungen"
+            }
+          ]
+        },
+        {
+          "type": "card",
+          "link": {
+            "href": "https://www.beispiel-agentur.de/leistungen/webdesign",
+            "path": "/leistungen/webdesign",
+            "external": false
+          },
+          "blocks": [
+            {
+              "type": "image",
+              "src": "assets/images/c8c899c3-webdesign.png",
+              "originalSrc": "https://www.beispiel-agentur.de/media/webdesign.png",
+              "alt": "Webdesign Icon",
+              "width": 32,
+              "height": 32,
+              "role": "icon"
+            },
+            {
+              "type": "heading",
+              "level": 3,
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Webdesign"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Moderne, schnelle und barrierearme Websites."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "card",
+          "link": {
+            "href": "https://www.beispiel-agentur.de/leistungen/seo",
+            "path": "/leistungen/seo",
+            "external": false
+          },
+          "blocks": [
+            {
+              "type": "image",
+              "src": "assets/images/65dda5b4-seo.png",
+              "originalSrc": "https://www.beispiel-agentur.de/media/seo.png",
+              "alt": "SEO Icon",
+              "width": 32,
+              "height": 32,
+              "role": "icon"
+            },
+            {
+              "type": "heading",
+              "level": 3,
+              "content": [
+                {
+                  "type": "text",
+                  "text": "SEO"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Sichtbarkeit in Suchmaschinen, nachhaltig."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "testimonials",
+      "type": "testimonials",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": [
+            {
+              "type": "text",
+              "text": "Das sagen unsere Kunden"
+            }
+          ]
+        },
+        {
+          "type": "quote",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Schnell, zuverlässig und kreativ."
+                }
+              ]
+            }
+          ],
+          "cite": [
+            {
+              "type": "text",
+              "text": "Anna M., Bäckerei Müller"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "type": "cta",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": [
+            {
+              "type": "text",
+              "text": "Bereit für Ihr Projekt?"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Wir freuen uns auf Ihre Nachricht."
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "label": "Kontakt aufnehmen",
+          "href": "https://www.beispiel-agentur.de/kontakt",
+          "path": "/kontakt",
+          "external": false,
+          "variant": "primary"
+        }
+      ]
+    }
+  ]
+}

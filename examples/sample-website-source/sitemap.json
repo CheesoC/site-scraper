@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "1.0",
+  "tree": {
+    "path": "/",
+    "segment": "",
+    "title": "Beispiel Agentur – Webdesign & SEO",
+    "exported": true,
+    "children": [
+      {
+        "path": "/impressum",
+        "segment": "impressum",
+        "title": "Impressum",
+        "exported": true,
+        "children": []
+      },
+      {
+        "path": "/kontakt",
+        "segment": "kontakt",
+        "title": "Kontakt",
+        "exported": true,
+        "children": []
+      },
+      {
+        "path": "/leistungen",
+        "segment": "leistungen",
+        "title": "Unsere Leistungen",
+        "exported": true,
+        "children": [
+          {
+            "path": "/leistungen/seo",
+            "segment": "seo",
+            "title": "SEO",
+            "exported": true,
+            "children": []
+          },
+          {
+            "path": "/leistungen/webdesign",
+            "segment": "webdesign",
+            "title": "Webdesign",
+            "exported": true,
+            "children": []
+          }
+        ]
+      },
+      {
+        "path": "/ueber-uns",
+        "segment": "ueber-uns",
+        "title": "Über uns",
+        "exported": true,
+        "children": []
+      }
+    ]
+  },
+  "links": {
+    "/": [
+      "/kontakt",
+      "/leistungen",
+      "/leistungen/seo",
+      "/leistungen/webdesign"
+    ],
+    "/leistungen": [
+      "/kontakt",
+      "/leistungen/seo",
+      "/leistungen/webdesign"
+    ],
+    "/leistungen/webdesign": [],
+    "/leistungen/seo": [
+      "/leistungen"
+    ],
+    "/ueber-uns": [],
+    "/kontakt": [],
+    "/impressum": []
+  }
+}

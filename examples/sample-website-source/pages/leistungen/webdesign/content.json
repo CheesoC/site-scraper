@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "1.0",
+  "path": "/leistungen/webdesign",
+  "url": "https://www.beispiel-agentur.de/leistungen/webdesign",
+  "title": "Webdesign",
+  "meta": {
+    "title": "Webdesign",
+    "description": "Websites mit System.",
+    "canonical": "https://www.beispiel-agentur.de/leistungen/webdesign",
+    "lang": "de",
+    "h1": "Webdesign",
+    "robots": null,
+    "og": {
+      "title": "Webdesign",
+      "description": "Websites mit System.",
+      "image": null,
+      "imageUrl": null,
+      "type": "website",
+      "url": "https://www.beispiel-agentur.de/leistungen/webdesign"
+    },
+    "structuredData": []
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "type": "content",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 1,
+          "content": [
+            {
+              "type": "text",
+              "text": "Webdesign"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "So arbeiten wir:"
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": true,
+          "items": [
+            {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Analyse"
+                }
+              ]
+            },
+            {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Konzept"
+                }
+              ],
+              "blocks": [
+                {
+                  "type": "list",
+                  "ordered": false,
+                  "items": [
+                    {
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "Sitemap"
+                        }
+                      ]
+                    },
+                    {
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "Wireframes"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Umsetzung"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "embed",
+          "provider": "youtube",
+          "url": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+          "title": "Unser Prozess im Video"
+        },
+        {
+          "type": "code",
+          "text": "<h1>Hallo Welt</h1>",
+          "language": "html"
+        }
+      ]
+    }
+  ],
+  "breadcrumbs": [
+    {
+      "label": "Start",
+      "url": "https://www.beispiel-agentur.de/",
+      "path": "/",
+      "external": false,
+      "order": 0,
+      "depth": 0,
+      "type": "breadcrumb",
+      "children": []
+    },
+    {
+      "label": "Leistungen",
+      "url": "https://www.beispiel-agentur.de/leistungen",
+      "path": "/leistungen",
+      "external": false,
+      "order": 1,
+      "depth": 0,
+      "type": "breadcrumb",
+      "children": []
+    },
+    {
+      "label": "Webdesign",
+      "url": "https://www.beispiel-agentur.de/leistungen/webdesign",
+      "path": "/leistungen/webdesign",
+      "external": false,
+      "order": 2,
+      "depth": 0,
+      "type": "breadcrumb",
+      "children": []
+    }
+  ]
+}

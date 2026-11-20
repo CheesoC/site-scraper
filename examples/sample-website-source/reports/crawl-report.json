@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "crawl",
+  "status": "complete",
+  "startedAt": "2026-11-20T12:00:00Z",
+  "finishedAt": "2026-11-20T12:00:05Z",
+  "config": {
+    "maxPages": 100,
+    "maxDepth": 5
+  },
+  "limitsReached": [],
+  "stats": {
+    "discovered": 7,
+    "exported": 7,
+    "failed": 0,
+    "assets": 6,
+    "assetsFailed": 0,
+    "brokenLinks": 0
+  },
+  "issues": []
+}

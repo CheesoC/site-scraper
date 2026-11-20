@@ -1,0 +1,136 @@
+{
+  "schemaVersion": "1.0",
+  "sourceUrl": "https://www.beispiel-agentur.de/",
+  "crawledAt": "2026-11-20T12:00:00Z",
+  "producer": {
+    "name": "examples/build_sample.py",
+    "version": "1.0"
+  },
+  "site": {
+    "name": "Beispiel Agentur",
+    "lang": "de",
+    "homePath": "/"
+  },
+  "files": {
+    "navigation": "navigation.json",
+    "sitemap": "sitemap.json",
+    "assets": "assets/images.json",
+    "report": "reports/crawl-report.json"
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Beispiel Agentur – Webdesign & SEO",
+      "originalUrl": "https://www.beispiel-agentur.de/",
+      "finalUrl": "https://www.beispiel-agentur.de/",
+      "normalizedUrl": "https://www.beispiel-agentur.de/",
+      "canonical": "https://www.beispiel-agentur.de/",
+      "aliases": [],
+      "dir": "pages/index",
+      "content": "pages/index/content.json",
+      "markdown": "pages/index/content.md",
+      "html": "pages/index/original.html",
+      "images": "pages/index/images.json",
+      "depth": 0,
+      "status": 200
+    },
+    {
+      "path": "/leistungen",
+      "title": "Unsere Leistungen",
+      "originalUrl": "https://www.beispiel-agentur.de/leistungen",
+      "finalUrl": "https://www.beispiel-agentur.de/leistungen",
+      "normalizedUrl": "https://www.beispiel-agentur.de/leistungen",
+      "canonical": "https://www.beispiel-agentur.de/leistungen",
+      "aliases": [],
+      "dir": "pages/leistungen",
+      "content": "pages/leistungen/content.json",
+      "markdown": "pages/leistungen/content.md",
+      "html": "pages/leistungen/original.html",
+      "images": "pages/leistungen/images.json",
+      "depth": 1,
+      "status": 200
+    },
+    {
+      "path": "/leistungen/webdesign",
+      "title": "Webdesign",
+      "originalUrl": "https://www.beispiel-agentur.de/leistungen/webdesign",
+      "finalUrl": "https://www.beispiel-agentur.de/leistungen/webdesign",
+      "normalizedUrl": "https://www.beispiel-agentur.de/leistungen/webdesign",
+      "canonical": "https://www.beispiel-agentur.de/leistungen/webdesign",
+      "aliases": [],
+      "dir": "pages/leistungen/webdesign",
+      "content": "pages/leistungen/webdesign/content.json",
+      "markdown": "pages/leistungen/webdesign/content.md",
+      "html": "pages/leistungen/webdesign/original.html",
+      "images": "pages/leistungen/webdesign/images.json",
+      "depth": 2,
+      "status": 200
+    },
+    {
+      "path": "/leistungen/seo",
+      "title": "SEO",
+      "originalUrl": "https://www.beispiel-agentur.de/leistungen/seo",
+      "finalUrl": "https://www.beispiel-agentur.de/leistungen/seo",
+      "normalizedUrl": "https://www.beispiel-agentur.de/leistungen/seo",
+      "canonical": "https://www.beispiel-agentur.de/leistungen/seo",
+      "aliases": [],
+      "dir": "pages/leistungen/seo",
+      "content": "pages/leistungen/seo/content.json",
+      "markdown": "pages/leistungen/seo/content.md",
+      "html": "pages/leistungen/seo/original.html",
+      "images": "pages/leistungen/seo/images.json",
+      "depth": 2,
+      "status": 200
+    },
+    {
+      "path": "/ueber-uns",
+      "title": "Über uns",
+      "originalUrl": "https://www.beispiel-agentur.de/ueber-uns",
+      "finalUrl": "https://www.beispiel-agentur.de/ueber-uns",
+      "normalizedUrl": "https://www.beispiel-agentur.de/ueber-uns",
+      "canonical": "https://www.beispiel-agentur.de/ueber-uns",
+      "aliases": [],
+      "dir": "pages/ueber-uns",
+      "content": "pages/ueber-uns/content.json",
+      "markdown": "pages/ueber-uns/content.md",
+      "html": "pages/ueber-uns/original.html",
+      "images": "pages/ueber-uns/images.json",
+      "depth": 1,
+      "status": 200
+    },
+    {
+      "path": "/kontakt",
+      "title": "Kontakt",
+      "originalUrl": "https://www.beispiel-agentur.de/kontakt",
+      "finalUrl": "https://www.beispiel-agentur.de/kontakt",
+      "normalizedUrl": "https://www.beispiel-agentur.de/kontakt",
+      "canonical": "https://www.beispiel-agentur.de/kontakt",
+      "aliases": [],
+      "dir": "pages/kontakt",
+      "content": "pages/kontakt/content.json",
+      "markdown": "pages/kontakt/content.md",
+      "html": "pages/kontakt/original.html",
+      "images": "pages/kontakt/images.json",
+      "depth": 1,
+      "status": 200
+    },
+    {
+      "path": "/impressum",
+      "title": "Impressum",
+      "originalUrl": "https://www.beispiel-agentur.de/impressum",
+      "finalUrl": "https://www.beispiel-agentur.de/impressum",
+      "normalizedUrl": "https://www.beispiel-agentur.de/impressum",
+      "canonical": "https://www.beispiel-agentur.de/impressum",
+      "aliases": [
+        "/impressum.html"
+      ],
+      "dir": "pages/impressum",
+      "content": "pages/impressum/content.json",
+      "markdown": "pages/impressum/content.md",
+      "html": "pages/impressum/original.html",
+      "images": "pages/impressum/images.json",
+      "depth": 1,
+      "status": 200
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "schemaVersion": "1.0",
+  "path": "/ueber-uns",
+  "url": "https://www.beispiel-agentur.de/ueber-uns",
+  "title": "Über uns",
+  "meta": {
+    "title": "Über uns",
+    "description": "Das Team hinter der Agentur.",
+    "canonical": "https://www.beispiel-agentur.de/ueber-uns",
+    "lang": "de",
+    "h1": "Über uns",
+    "robots": null,
+    "og": {
+      "title": "Über uns",
+      "description": "Das Team hinter der Agentur.",
+      "image": null,
+      "imageUrl": null,
+      "type": "website",
+      "url": "https://www.beispiel-agentur.de/ueber-uns"
+    },
+    "structuredData": []
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "type": "content",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 1,
+          "content": [
+            {
+              "type": "text",
+              "text": "Über uns"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Seit 2012 in Musterstadt."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "team",
+      "type": "gallery",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": [
+            {
+              "type": "text",
+              "text": "Team"
+            }
+          ]
+        },
+        {
+          "type": "gallery",
+          "images": [
+            {
+              "type": "image",
+              "src": "assets/images/c0582e5c-team-1.png",
+              "originalSrc": "https://www.beispiel-agentur.de/media/team-1.png",
+              "alt": "Erika Muster",
+              "width": 24,
+              "height": 24,
+              "role": "content",
+              "caption": [
+                {
+                  "type": "text",
+                  "text": "Erika Muster, Design"
+                }
+              ]
+            },
+            {
+              "type": "image",
+              "src": "assets/images/db47eca3-team-2.png",
+              "originalSrc": "https://www.beispiel-agentur.de/media/team-2.png",
+              "alt": "Max Muster",
+              "width": 24,
+              "height": 24,
+              "role": "content",
+              "caption": [
+                {
+                  "type": "text",
+                  "text": "Max Muster, Entwicklung"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,296 @@
+{
+  "schemaVersion": "1.0",
+  "main": [
+    {
+      "label": "Start",
+      "url": "https://www.beispiel-agentur.de/",
+      "path": "/",
+      "external": false,
+      "order": 0,
+      "depth": 0,
+      "type": "main",
+      "children": []
+    },
+    {
+      "label": "Leistungen",
+      "url": "https://www.beispiel-agentur.de/leistungen",
+      "path": "/leistungen",
+      "external": false,
+      "order": 1,
+      "depth": 0,
+      "type": "main",
+      "children": [
+        {
+          "label": "Webdesign",
+          "url": "https://www.beispiel-agentur.de/leistungen/webdesign",
+          "path": "/leistungen/webdesign",
+          "external": false,
+          "order": 0,
+          "depth": 1,
+          "type": "main",
+          "children": []
+        },
+        {
+          "label": "SEO",
+          "url": "https://www.beispiel-agentur.de/leistungen/seo",
+          "path": "/leistungen/seo",
+          "external": false,
+          "order": 1,
+          "depth": 1,
+          "type": "main",
+          "children": []
+        }
+      ]
+    },
+    {
+      "label": "Über uns",
+      "url": "https://www.beispiel-agentur.de/ueber-uns",
+      "path": "/ueber-uns",
+      "external": false,
+      "order": 2,
+      "depth": 0,
+      "type": "main",
+      "children": []
+    },
+    {
+      "label": "Kontakt",
+      "url": "https://www.beispiel-agentur.de/kontakt",
+      "path": "/kontakt",
+      "external": false,
+      "order": 3,
+      "depth": 0,
+      "type": "main",
+      "children": []
+    }
+  ],
+  "footer": [
+    {
+      "label": "Agentur",
+      "url": null,
+      "path": null,
+      "external": false,
+      "order": 0,
+      "depth": 0,
+      "type": "footer",
+      "children": [
+        {
+          "label": "Über uns",
+          "url": "https://www.beispiel-agentur.de/ueber-uns",
+          "path": "/ueber-uns",
+          "external": false,
+          "order": 0,
+          "depth": 1,
+          "type": "footer",
+          "children": []
+        },
+        {
+          "label": "Kontakt",
+          "url": "https://www.beispiel-agentur.de/kontakt",
+          "path": "/kontakt",
+          "external": false,
+          "order": 1,
+          "depth": 1,
+          "type": "footer",
+          "children": []
+        }
+      ]
+    },
+    {
+      "label": "Rechtliches",
+      "url": null,
+      "path": null,
+      "external": false,
+      "order": 1,
+      "depth": 0,
+      "type": "footer",
+      "children": [
+        {
+          "label": "Impressum",
+          "url": "https://www.beispiel-agentur.de/impressum",
+          "path": "/impressum",
+          "external": false,
+          "order": 0,
+          "depth": 1,
+          "type": "footer",
+          "children": []
+        },
+        {
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/",
+          "path": null,
+          "external": true,
+          "order": 1,
+          "depth": 1,
+          "type": "footer",
+          "children": []
+        }
+      ]
+    }
+  ],
+  "logo": {
+    "href": "https://www.beispiel-agentur.de/",
+    "path": "/",
+    "external": false,
+    "label": "Beispiel Agentur",
+    "image": "assets/images/4340bf81-logo.svg",
+    "imageUrl": "https://www.beispiel-agentur.de/media/logo.svg",
+    "alt": "Beispiel Agentur Logo"
+  },
+  "cta": [
+    {
+      "label": "Projekt anfragen",
+      "url": "https://www.beispiel-agentur.de/kontakt",
+      "path": "/kontakt",
+      "external": false,
+      "order": 0,
+      "depth": 0,
+      "type": "cta",
+      "children": []
+    }
+  ],
+  "menus": [
+    {
+      "id": "menu-1",
+      "type": "main",
+      "label": "Hauptmenü",
+      "selector": "header nav",
+      "ambiguous": false,
+      "pages": 7,
+      "items": [
+        {
+          "label": "Start",
+          "url": "https://www.beispiel-agentur.de/",
+          "path": "/",
+          "external": false,
+          "order": 0,
+          "depth": 0,
+          "type": "main",
+          "children": []
+        },
+        {
+          "label": "Leistungen",
+          "url": "https://www.beispiel-agentur.de/leistungen",
+          "path": "/leistungen",
+          "external": false,
+          "order": 1,
+          "depth": 0,
+          "type": "main",
+          "children": [
+            {
+              "label": "Webdesign",
+              "url": "https://www.beispiel-agentur.de/leistungen/webdesign",
+              "path": "/leistungen/webdesign",
+              "external": false,
+              "order": 0,
+              "depth": 1,
+              "type": "main",
+              "children": []
+            },
+            {
+              "label": "SEO",
+              "url": "https://www.beispiel-agentur.de/leistungen/seo",
+              "path": "/leistungen/seo",
+              "external": false,
+              "order": 1,
+              "depth": 1,
+              "type": "main",
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Über uns",
+          "url": "https://www.beispiel-agentur.de/ueber-uns",
+          "path": "/ueber-uns",
+          "external": false,
+          "order": 2,
+          "depth": 0,
+          "type": "main",
+          "children": []
+        },
+        {
+          "label": "Kontakt",
+          "url": "https://www.beispiel-agentur.de/kontakt",
+          "path": "/kontakt",
+          "external": false,
+          "order": 3,
+          "depth": 0,
+          "type": "main",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "menu-2",
+      "type": "footer",
+      "label": null,
+      "selector": "footer",
+      "ambiguous": false,
+      "pages": 7,
+      "items": [
+        {
+          "label": "Agentur",
+          "url": null,
+          "path": null,
+          "external": false,
+          "order": 0,
+          "depth": 0,
+          "type": "footer",
+          "children": [
+            {
+              "label": "Über uns",
+              "url": "https://www.beispiel-agentur.de/ueber-uns",
+              "path": "/ueber-uns",
+              "external": false,
+              "order": 0,
+              "depth": 1,
+              "type": "footer",
+              "children": []
+            },
+            {
+              "label": "Kontakt",
+              "url": "https://www.beispiel-agentur.de/kontakt",
+              "path": "/kontakt",
+              "external": false,
+              "order": 1,
+              "depth": 1,
+              "type": "footer",
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Rechtliches",
+          "url": null,
+          "path": null,
+          "external": false,
+          "order": 1,
+          "depth": 0,
+          "type": "footer",
+          "children": [
+            {
+              "label": "Impressum",
+              "url": "https://www.beispiel-agentur.de/impressum",
+              "path": "/impressum",
+              "external": false,
+              "order": 0,
+              "depth": 1,
+              "type": "footer",
+              "children": []
+            },
+            {
+              "label": "LinkedIn",
+              "url": "https://www.linkedin.com/",
+              "path": null,
+              "external": true,
+              "order": 1,
+              "depth": 1,
+              "type": "footer",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

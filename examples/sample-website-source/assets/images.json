@@ -1,0 +1,104 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "registry",
+  "assets": [
+    {
+      "id": "2b080ba667671d2b",
+      "file": "assets/images/2b080ba6-hero.png",
+      "originalUrls": [
+        "https://www.beispiel-agentur.de/media/hero.png"
+      ],
+      "contentType": "image/png",
+      "bytes": 135,
+      "sha256": "2b080ba667671d2b1786345bbd37f019a4b4e12642147dbfa20384d0ca1e8d08",
+      "width": 64,
+      "height": 32,
+      "pages": [
+        "/",
+        "/leistungen"
+      ]
+    },
+    {
+      "id": "c8c899c3564491a9",
+      "file": "assets/images/c8c899c3-webdesign.png",
+      "originalUrls": [
+        "https://www.beispiel-agentur.de/media/webdesign.png"
+      ],
+      "contentType": "image/png",
+      "bytes": 99,
+      "sha256": "c8c899c3564491a9b3cf1702c4d54e6b768d1b8ce3806c8f0e2589f184a9b5c2",
+      "width": 32,
+      "height": 32,
+      "pages": [
+        "/",
+        "/leistungen"
+      ]
+    },
+    {
+      "id": "65dda5b4e37cb987",
+      "file": "assets/images/65dda5b4-seo.png",
+      "originalUrls": [
+        "https://www.beispiel-agentur.de/media/seo.png"
+      ],
+      "contentType": "image/png",
+      "bytes": 99,
+      "sha256": "65dda5b4e37cb9877bf2bbca1ed500bcc5e6effed97987bbe194c9ccf7c3305f",
+      "width": 32,
+      "height": 32,
+      "pages": [
+        "/"
+      ]
+    },
+    {
+      "id": "c0582e5c41c1d378",
+      "file": "assets/images/c0582e5c-team-1.png",
+      "originalUrls": [
+        "https://www.beispiel-agentur.de/media/team-1.png"
+      ],
+      "contentType": "image/png",
+      "bytes": 88,
+      "sha256": "c0582e5c41c1d378640400245e555589c87bbddc00154aea6d5466da92f1c9ef",
+      "width": 24,
+      "height": 24,
+      "pages": [
+        "/ueber-uns"
+      ]
+    },
+    {
+      "id": "db47eca39e0b3312",
+      "file": "assets/images/db47eca3-team-2.png",
+      "originalUrls": [
+        "https://www.beispiel-agentur.de/media/team-2.png"
+      ],
+      "contentType": "image/png",
+      "bytes": 88,
+      "sha256": "db47eca39e0b3312647cdfb41e37c93691ae38fdacb33e0a3d9f276c008c8070",
+      "width": 24,
+      "height": 24,
+      "pages": [
+        "/ueber-uns"
+      ]
+    },
+    {
+      "id": "4340bf819113f096",
+      "file": "assets/images/4340bf81-logo.svg",
+      "originalUrls": [
+        "https://www.beispiel-agentur.de/media/logo.svg"
+      ],
+      "contentType": "image/svg+xml",
+      "bytes": 218,
+      "sha256": "4340bf819113f096dd81a0ae297a29e063fc75e96f03e69ab83a2fed063a6ea7",
+      "width": 120,
+      "height": 32,
+      "pages": [
+        "/",
+        "/leistungen",
+        "/leistungen/webdesign",
+        "/leistungen/seo",
+        "/ueber-uns",
+        "/kontakt",
+        "/impressum"
+      ]
+    }
+  ]
+}

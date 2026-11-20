@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "page",
+  "path": "/ueber-uns",
+  "images": [
+    {
+      "originalUrl": "https://www.beispiel-agentur.de/media/team-1.png",
+      "src": "assets/images/c0582e5c-team-1.png",
+      "assetId": "c0582e5c41c1d378",
+      "alt": "Erika Muster",
+      "caption": "Erika Muster, Design",
+      "sectionId": "team",
+      "blockIndex": 1,
+      "order": 0,
+      "role": "content"
+    },
+    {
+      "originalUrl": "https://www.beispiel-agentur.de/media/team-2.png",
+      "src": "assets/images/db47eca3-team-2.png",
+      "assetId": "db47eca39e0b3312",
+      "alt": "Max Muster",
+      "caption": "Max Muster, Entwicklung",
+      "sectionId": "team",
+      "blockIndex": 1,
+      "order": 1,
+      "role": "content"
+    }
+  ]
+}

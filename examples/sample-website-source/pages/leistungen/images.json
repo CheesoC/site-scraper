@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "page",
+  "path": "/leistungen",
+  "images": [
+    {
+      "originalUrl": "https://www.beispiel-agentur.de/media/hero.png",
+      "src": "assets/images/2b080ba6-hero.png",
+      "assetId": "2b080ba667671d2b",
+      "alt": "Unsere Leistungen",
+      "caption": "Ein Überblick",
+      "sectionId": "s1",
+      "blockIndex": 2,
+      "order": 0,
+      "role": "content"
+    },
+    {
+      "originalUrl": "https://www.beispiel-agentur.de/media/webdesign.png",
+      "src": "assets/images/c8c899c3-webdesign.png",
+      "assetId": "c8c899c3564491a9",
+      "alt": "Webdesign",
+      "caption": null,
+      "sectionId": "s1",
+      "blockIndex": 5,
+      "order": 1,
+      "role": "content"
+    }
+  ]
+}

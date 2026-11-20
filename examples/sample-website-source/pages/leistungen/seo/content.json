@@ -1,0 +1,176 @@
+{
+  "schemaVersion": "1.0",
+  "path": "/leistungen/seo",
+  "url": "https://www.beispiel-agentur.de/leistungen/seo",
+  "title": "SEO",
+  "meta": {
+    "title": "SEO",
+    "description": "Gefunden werden.",
+    "canonical": "https://www.beispiel-agentur.de/leistungen/seo",
+    "lang": "de",
+    "h1": "SEO",
+    "robots": null,
+    "og": {
+      "title": "SEO",
+      "description": "Gefunden werden.",
+      "image": null,
+      "imageUrl": null,
+      "type": "website",
+      "url": "https://www.beispiel-agentur.de/leistungen/seo"
+    },
+    "structuredData": []
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "type": "content",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 1,
+          "content": [
+            {
+              "type": "text",
+              "text": "SEO"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Suchmaschinenoptimierung mit Plan."
+            },
+            {
+              "type": "break"
+            },
+            {
+              "type": "text",
+              "text": "Ohne Tricks."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "faq",
+      "type": "faq",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": [
+            {
+              "type": "text",
+              "text": "Häufige Fragen"
+            }
+          ]
+        },
+        {
+          "type": "accordion",
+          "items": [
+            {
+              "title": [
+                {
+                  "type": "text",
+                  "text": "Wie lange dauert SEO?"
+                }
+              ],
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Erste Ergebnisse meist nach 3–6 Monaten."
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "title": [
+                {
+                  "type": "text",
+                  "text": "Was kostet SEO?"
+                }
+              ],
+              "blocks": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Siehe "
+                    },
+                    {
+                      "type": "link",
+                      "href": "https://www.beispiel-agentur.de/leistungen",
+                      "path": "/leistungen",
+                      "external": false,
+                      "children": [
+                        {
+                          "type": "text",
+                          "text": "Pakete"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "text": "."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "legacy",
+      "type": "generic",
+      "blocks": [
+        {
+          "type": "html",
+          "html": "<div><span>Widget-Inhalt</span> <abbr title=\"Search Engine Optimization\">SEO</abbr></div>",
+          "text": "Widget-Inhalt SEO",
+          "reason": "unclassified element <div class=\"widget\">"
+        }
+      ]
+    }
+  ],
+  "breadcrumbs": [
+    {
+      "label": "Start",
+      "url": "https://www.beispiel-agentur.de/",
+      "path": "/",
+      "external": false,
+      "order": 0,
+      "depth": 0,
+      "type": "breadcrumb",
+      "children": []
+    },
+    {
+      "label": "Leistungen",
+      "url": "https://www.beispiel-agentur.de/leistungen",
+      "path": "/leistungen",
+      "external": false,
+      "order": 1,
+      "depth": 0,
+      "type": "breadcrumb",
+      "children": []
+    },
+    {
+      "label": "SEO",
+      "url": "https://www.beispiel-agentur.de/leistungen/seo",
+      "path": "/leistungen/seo",
+      "external": false,
+      "order": 2,
+      "depth": 0,
+      "type": "breadcrumb",
+      "children": []
+    }
+  ]
+}

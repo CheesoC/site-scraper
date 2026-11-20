@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "page",
+  "path": "/",
+  "images": [
+    {
+      "originalUrl": "https://www.beispiel-agentur.de/media/hero.png",
+      "src": "assets/images/2b080ba6-hero.png",
+      "assetId": "2b080ba667671d2b",
+      "alt": "Abstrakte Illustration einer Website",
+      "caption": null,
+      "sectionId": "hero",
+      "blockIndex": 2,
+      "order": 0,
+      "role": "background"
+    },
+    {
+      "originalUrl": "https://www.beispiel-agentur.de/media/webdesign.png",
+      "src": "assets/images/c8c899c3-webdesign.png",
+      "assetId": "c8c899c3564491a9",
+      "alt": "Webdesign Icon",
+      "caption": null,
+      "sectionId": "features",
+      "blockIndex": 0,
+      "order": 1,
+      "role": "icon"
+    },
+    {
+      "originalUrl": "https://www.beispiel-agentur.de/media/seo.png",
+      "src": "assets/images/65dda5b4-seo.png",
+      "assetId": "65dda5b4e37cb987",
+      "alt": "SEO Icon",
+      "caption": null,
+      "sectionId": "features",
+      "blockIndex": 0,
+      "order": 2,
+      "role": "icon"
+    }
+  ]
+}

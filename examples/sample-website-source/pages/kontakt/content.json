@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "1.0",
+  "path": "/kontakt",
+  "url": "https://www.beispiel-agentur.de/kontakt",
+  "title": "Kontakt",
+  "meta": {
+    "title": "Kontakt",
+    "description": "So erreichen Sie uns.",
+    "canonical": "https://www.beispiel-agentur.de/kontakt",
+    "lang": "de",
+    "h1": "Kontakt",
+    "robots": null,
+    "og": {
+      "title": "Kontakt",
+      "description": "So erreichen Sie uns.",
+      "image": null,
+      "imageUrl": null,
+      "type": "website",
+      "url": "https://www.beispiel-agentur.de/kontakt"
+    },
+    "structuredData": []
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "type": "content",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 1,
+          "content": [
+            {
+              "type": "text",
+              "text": "Kontakt"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Telefon: "
+            },
+            {
+              "type": "link",
+              "href": "tel:+49123456789",
+              "path": null,
+              "external": true,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "+49 123 456789"
+                }
+              ]
+            },
+            {
+              "type": "break"
+            },
+            {
+              "type": "text",
+              "text": "E-Mail: "
+            },
+            {
+              "type": "link",
+              "href": "mailto:hallo@beispiel-agentur.de",
+              "path": null,
+              "external": true,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "hallo@beispiel-agentur.de"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "form",
+      "type": "form",
+      "blocks": [
+        {
+          "type": "form",
+          "action": "https://www.beispiel-agentur.de/kontakt/senden",
+          "method": "post",
+          "submitLabel": "Absenden",
+          "fields": [
+            {
+              "name": "name",
+              "label": "Name",
+              "inputType": "text",
+              "required": true
+            },
+            {
+              "name": "email",
+              "label": "E-Mail",
+              "inputType": "email",
+              "required": true
+            },
+            {
+              "name": "thema",
+              "label": "Thema",
+              "inputType": "select",
+              "required": false,
+              "options": [
+                "Webdesign",
+                "SEO"
+              ]
+            },
+            {
+              "name": "nachricht",
+              "label": "Nachricht",
+              "inputType": "textarea",
+              "required": true
+            }
+          ]
+        },
+        {
+          "type": "embed",
+          "provider": "map",
+          "url": "https://www.openstreetmap.org/export/embed.html?bbox=13.3,52.5,13.4,52.6",
+          "title": "Anfahrt"
+        }
+      ]
+    }
+  ]
+}

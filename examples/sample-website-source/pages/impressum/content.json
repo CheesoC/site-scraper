@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0",
+  "path": "/impressum",
+  "url": "https://www.beispiel-agentur.de/impressum",
+  "title": "Impressum",
+  "meta": {
+    "title": "Impressum",
+    "description": null,
+    "canonical": "https://www.beispiel-agentur.de/impressum",
+    "lang": "de",
+    "h1": "Impressum",
+    "robots": null,
+    "og": {
+      "title": "Impressum",
+      "description": null,
+      "image": null,
+      "imageUrl": null,
+      "type": "website",
+      "url": "https://www.beispiel-agentur.de/impressum"
+    },
+    "structuredData": []
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "type": "content",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 1,
+          "content": [
+            {
+              "type": "text",
+              "text": "Impressum"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Beispiel Agentur GmbH"
+            },
+            {
+              "type": "break"
+            },
+            {
+              "type": "text",
+              "text": "Musterstraße 1, 12345 Musterstadt"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "schemaVersion": "1.0",
+  "path": "/leistungen",
+  "url": "https://www.beispiel-agentur.de/leistungen",
+  "title": "Unsere Leistungen",
+  "meta": {
+    "title": "Unsere Leistungen",
+    "description": "Unsere Leistungen im Überblick.",
+    "canonical": "https://www.beispiel-agentur.de/leistungen",
+    "lang": "de",
+    "h1": "Unsere Leistungen",
+    "robots": null,
+    "og": {
+      "title": "Unsere Leistungen",
+      "description": "Unsere Leistungen im Überblick.",
+      "image": null,
+      "imageUrl": null,
+      "type": "website",
+      "url": "https://www.beispiel-agentur.de/leistungen"
+    },
+    "structuredData": []
+  },
+  "sections": [
+    {
+      "id": "s1",
+      "type": "content",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 1,
+          "content": [
+            {
+              "type": "text",
+              "text": "Unsere Leistungen"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Unsere Leistungen im Überblick."
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "assets/images/2b080ba6-hero.png",
+          "originalSrc": "https://www.beispiel-agentur.de/media/hero.png",
+          "alt": "Unsere Leistungen",
+          "width": 64,
+          "height": 32,
+          "role": "content",
+          "caption": [
+            {
+              "type": "text",
+              "text": "Ein Überblick"
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": [
+            {
+              "type": "text",
+              "text": "Webdesign"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Individuelle Websites. "
+            },
+            {
+              "type": "link",
+              "href": "https://www.beispiel-agentur.de/leistungen/webdesign",
+              "path": "/leistungen/webdesign",
+              "external": false,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Mehr erfahren"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "src": "assets/images/c8c899c3-webdesign.png",
+          "originalSrc": "https://www.beispiel-agentur.de/media/webdesign.png",
+          "alt": "Webdesign",
+          "width": 32,
+          "height": 32,
+          "role": "content"
+        },
+        {
+          "type": "heading",
+          "level": 2,
+          "content": [
+            {
+              "type": "text",
+              "text": "SEO"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Technisches SEO, Content und Monitoring. "
+            },
+            {
+              "type": "link",
+              "href": "https://www.beispiel-agentur.de/leistungen/seo",
+              "path": "/leistungen/seo",
+              "external": false,
+              "children": [
+                {
+                  "type": "text",
+                  "text": "Mehr erfahren"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "caption": [
+            {
+              "type": "text",
+              "text": "Pakete"
+            }
+          ],
+          "head": [
+            [
+              {
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Paket"
+                  }
+                ],
+                "header": true
+              },
+              {
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Preis"
+                  }
+                ],
+                "header": true
+              }
+            ]
+          ],
+          "rows": [
+            [
+              {
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Start"
+                  }
+                ]
+              },
+              {
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "ab 1.900 €"
+                  }
+                ]
+              }
+            ],
+            [
+              {
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Business",
+                    "marks": [
+                      "bold"
+                    ]
+                  }
+                ]
+              },
+              {
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "ab 4.900 €"
+                  }
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cta",
+      "type": "cta",
+      "blocks": [
+        {
+          "type": "heading",
+          "level": 2,
+          "content": [
+            {
+              "type": "text",
+              "text": "Bereit für Ihr Projekt?"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Wir freuen uns auf Ihre Nachricht."
+            }
+          ]
+        },
+        {
+          "type": "button",
+          "label": "Kontakt aufnehmen",
+          "href": "https://www.beispiel-agentur.de/kontakt",
+          "path": "/kontakt",
+          "external": false,
+          "variant": "primary"
+        }
+      ]
+    }
+  ],
+  "breadcrumbs": [
+    {
+      "label": "Start",
+      "url": "https://www.beispiel-agentur.de/",
+      "path": "/",
+      "external": false,
+      "order": 0,
+      "depth": 0,
+      "type": "breadcrumb",
+      "children": []
+    },
+    {
+      "label": "Leistungen",
+      "url": "https://www.beispiel-agentur.de/leistungen",
+      "path": "/leistungen",
+      "external": false,
+      "order": 1,
+      "depth": 0,
+      "type": "breadcrumb",
+      "children": []
+    }
+  ]
+}
