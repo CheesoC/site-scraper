@@ -79,6 +79,7 @@ class PageCrawler:
         self._attempts = 0
         self._lock = asyncio.Lock()
         self._hashes: dict[str, str] = {}
+        self._documents: set[str] = set()
 
     # ------------------------------------------------------------------ run
     async def run(self) -> CrawlState:
@@ -152,6 +153,7 @@ class PageCrawler:
         state = self.state
         if not result.ok:
             if result.error and result.error.startswith("not html"):
+                self._documents.add(url)
                 state.documents.append({"url": url, "contentType": result.content_type, "page": found_on})
                 return
             if result.error and result.error.startswith("render error"):
@@ -205,6 +207,9 @@ class PageCrawler:
         out: list[str] = []
         for link_url, is_page in links:
             if not is_page:
+                if self.normalizer.is_internal(link_url) and link_url not in self._documents:
+                    self._documents.add(link_url)
+                    self.state.documents.append({"url": link_url, "contentType": None, "page": path})
                 continue
             target = self.normalizer.to_path(link_url)
             if target != path and target not in out:
