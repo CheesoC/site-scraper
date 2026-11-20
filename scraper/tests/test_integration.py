@@ -2,7 +2,6 @@
 
 import json
 import os
-import shutil
 
 import pytest
 
@@ -84,11 +83,14 @@ async def test_static_crawl(tmp_path):
 
 
 def chromium_available() -> bool:
+    """True if the Chromium build expected by the installed Playwright version exists."""
     try:
-        import playwright  # noqa: F401
-    except ImportError:
+        from playwright.sync_api import sync_playwright
+
+        with sync_playwright() as p:
+            return os.path.exists(p.chromium.executable_path)
+    except Exception:
         return False
-    return bool(os.environ.get("PLAYWRIGHT_BROWSERS_PATH") or shutil.which("chromium") or os.path.isdir(os.path.expanduser("~/.cache/ms-playwright")))
 
 
 @pytest.mark.browser
