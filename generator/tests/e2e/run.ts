@@ -23,19 +23,22 @@ const { values } = parseArgs({
   },
 });
 
+// npm/npx sind unter Windows .cmd-Dateien, die Node nur über eine Shell startet (alle Argumente hier sind ohne Leerzeichen)
+const WINDOWS = process.platform === "win32";
+
 function loadPlaywright() {
   const require = createRequire(import.meta.url);
   try {
     return require("playwright");
   } catch {
-    const globalRoot = spawnSync("npm", ["root", "-g"], { encoding: "utf8" }).stdout.trim();
+    const globalRoot = spawnSync("npm", ["root", "-g"], { encoding: "utf8", shell: WINDOWS }).stdout.trim();
     return createRequire(path.join(globalRoot, "noop.js"))("playwright");
   }
 }
 
 function run(cmd: string, args: string[], cwd: string) {
   console.log(`$ ${cmd} ${args.join(" ")}`);
-  const result = spawnSync(cmd, args, { cwd, stdio: "inherit", env: { ...process.env, NEXT_TELEMETRY_DISABLED: "1" } });
+  const result = spawnSync(cmd, args, { cwd, stdio: "inherit", shell: WINDOWS, env: { ...process.env, NEXT_TELEMETRY_DISABLED: "1" } });
   if (result.status !== 0) throw new Error(`${cmd} ${args.join(" ")} failed with ${result.status}`);
 }
 
@@ -92,7 +95,7 @@ async function main() {
 
   const port = await freePort();
   const base = `http://127.0.0.1:${port}`;
-  const server = spawn("npx", ["next", "start", "-p", String(port)], { cwd: output, stdio: "ignore", env: { ...process.env, NEXT_TELEMETRY_DISABLED: "1" }, detached: true });
+  const server = spawn("npx", ["next", "start", "-p", String(port)], { cwd: output, stdio: "ignore", shell: WINDOWS, env: { ...process.env, NEXT_TELEMETRY_DISABLED: "1" }, detached: !WINDOWS });
   try {
     await waitFor(base + "/");
     const manifest = JSON.parse(fs.readFileSync(path.join(output, "content", "manifest.json"), "utf8"));
@@ -152,7 +155,9 @@ async function main() {
     await browser.close();
   } finally {
     try {
-      process.kill(-server.pid!, "SIGTERM");
+      // ganzen Prozessbaum beenden (npx -> next start); unter Windows gibt es keine Prozessgruppen-Signale
+      if (WINDOWS) spawnSync("taskkill", ["/pid", String(server.pid), "/T", "/F"], { stdio: "ignore" });
+      else process.kill(-server.pid!, "SIGTERM");
     } catch {
       /* already stopped */
     }

@@ -83,9 +83,19 @@ class URLNormalizer:
     * scheme/host lower case, default ports removed
     * fragment removed, tracking/session parameters removed, remaining query sorted
     * dot segments resolved, duplicate slashes collapsed, no trailing slash (except root)
+
+    Scope: on the start host only URLs below `scope` (a path prefix such as "/fsamzeisigwald/") are
+    internal, and that prefix becomes the site root "/" in site paths. By default the scope is the
+    directory of the start URL (everything up to its last "/"); "/" means the whole host.
     """
 
-    def __init__(self, start_url: str, allow_domains: list[str] | None = None, query_mode: str = "keep"):
+    def __init__(
+        self,
+        start_url: str,
+        allow_domains: list[str] | None = None,
+        query_mode: str = "keep",
+        scope_path: str | None = None,
+    ):
         if "://" not in start_url:
             start_url = "https://" + start_url
         self.start_url = self.normalize(start_url, keep_query=True) or start_url
@@ -97,6 +107,36 @@ class URLNormalizer:
         bare = self.host[4:] if self.host.startswith("www.") else self.host
         self.primary_hosts = {bare, "www." + bare} if bare else {self.host}
         self.allow_patterns = [d.lower().strip() for d in (allow_domains or []) if d.strip()]
+        if scope_path is None:
+            raw_path = urlsplit(start_url).path or "/"
+            scope_path = raw_path[: raw_path.rfind("/") + 1] or "/"
+        self.scope = self._scope_prefix(scope_path)
+        self._scope_unquoted = unquote(self.scope)
+        if not self.in_scope(urlsplit(self.start_url).path or "/"):
+            raise ValueError(f"Start-URL {self.start_url} liegt nicht im Bereich {self.scope}")
+
+    def _scope_prefix(self, path: str) -> str:
+        """Normalize a scope path to "/" or "/a/b/" (leading and trailing slash, quoted like page URLs)."""
+        path = (path or "/").strip()
+        if not path.startswith("/"):
+            path = "/" + path
+        normalized = self.normalize(f"{self.scheme}://{self.netloc}{path}")
+        path = urlsplit(normalized).path if normalized else "/"
+        return path if path == "/" else path.rstrip("/") + "/"
+
+    @property
+    def root_url(self) -> str:
+        """URL of the scope root, e.g. https://cms.sachsen.schule/fsamzeisigwald/."""
+        return f"{self.scheme}://{self.netloc}{self.scope}"
+
+    def in_scope(self, path: str) -> bool:
+        """Whether a (quoted) URL path on the start host lies inside the scope."""
+        if self.scope == "/":
+            return True
+        return path == self.scope[:-1] or path.startswith(self.scope)
+
+    def is_primary_host(self, host: str) -> bool:
+        return host in self.primary_hosts or host == self.host
 
     # ------------------------------------------------------------------ urls
     def normalize(self, url: str, base: str | None = None, keep_query: bool | None = None) -> str | None:
@@ -153,9 +193,11 @@ class URLNormalizer:
         return urlunsplit((scheme, netloc, path, query, ""))
 
     def is_internal(self, url: str) -> bool:
-        host = (urlsplit(url).hostname or "").lower()
-        if host in self.primary_hosts or host == self.host:
-            return True
+        parts = urlsplit(url)
+        host = (parts.hostname or "").lower()
+        if self.is_primary_host(host):
+            # the start host is restricted to the scope, even if an --allow-domain pattern would match it
+            return self.in_scope(parts.path or "/")
         for pattern in self.allow_patterns:
             if pattern.startswith("*."):
                 if host == pattern[2:] or host.endswith(pattern[1:]):
@@ -203,13 +245,20 @@ class URLNormalizer:
         """Map a normalized internal URL to a site path ("/", "/leistungen/seo", ...)."""
         parts = urlsplit(url)
         path = unquote(parts.path or "/")
+        host = (parts.hostname or "").lower()
+        if self.scope != "/" and self.is_primary_host(host):
+            # the scope prefix becomes the site root: /fsamzeisigwald/kontakt.html -> /kontakt.html
+            prefix = self._scope_unquoted
+            if path == prefix[:-1]:
+                path = "/"
+            elif path.startswith(prefix):
+                path = "/" + path[len(prefix):]
         path = INDEX_FILE_RE.sub("/", path)
         if path != "/":
             path = path.rstrip("/")
             path = HTML_EXT_RE.sub("", path)
         path = re.sub(r"\s", "-", path) or "/"
-        host = (parts.hostname or "").lower()
-        if host and host not in self.primary_hosts and host != self.host:
+        if host and not self.is_primary_host(host):
             path = f"/_/{host}" + (path if path != "/" else "")
         if parts.query:
             suffix = "q-" + slugify(unquote(parts.query).replace("=", "-").replace("&", "-"), 50)

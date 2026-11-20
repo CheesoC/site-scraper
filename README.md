@@ -19,36 +19,23 @@ Website-URL ──► scraper/ (Python, Crawl4AI) ──► Content-Archiv (Sche
 
 Voraussetzungen: Python ≥ 3.11, Node ≥ 20.9.
 
-Einmalig im Projektordner einrichten:
+Alle Befehle gelten für Linux, macOS und Windows gleich und werden im Projektordner ausgeführt. Unter Linux/macOS heißt Python vor dem Aktivieren der venv oft `python3`.
+
+Einmalig einrichten:
 
 ```bash
-scripts/setup.sh
+python scripts/setup.py
 ```
-
-Unter Windows in PowerShell (benötigt [Git for Windows](https://git-scm.com/download/win), dessen Git Bash das Skript ausführt):
-
-```powershell
-.\scripts\setup.ps1
-```
-
-Ein bloßes `scripts/setup.sh` in PowerShell öffnet ein eigenes Git-Bash-Fenster, das sich sofort wieder schließt, auch bei Fehlern. Deshalb `setup.ps1` verwenden: Es reicht alle Optionen durch und gibt die Ausgabe im aktuellen Terminal aus.
 
 Das Skript legt die Python-Umgebung `.venv/` im Projektordner an und installiert die Scraper-Abhängigkeiten in den getesteten Versionen aus `scraper/requirements-dev.txt`. Danach lädt es Chromium für das Browser-Rendering und installiert die Node-Pakete des Generators per `npm ci` nach `package-lock.json`.
 Ein erneuter Aufruf schadet nicht. Mit `--no-browser` lässt du den Chromium-Download weg. Der Scraper läuft dann nur mit `--no-render`. Mit `--no-node` überspringst du den Generator-Teil, etwa solange Node noch nicht installiert ist.
 
-Für die Arbeit im Terminal die Umgebung aktivieren:
+Für Variante B die Umgebung aktivieren (`redesign-tool.py` findet `.venv` auch ohne):
 
 ```bash
-source .venv/bin/activate
+source .venv/bin/activate        # Linux/macOS
+.\.venv\Scripts\Activate.ps1     # Windows (PowerShell)
 ```
-
-Unter Windows liegt die Umgebung in `.venv\Scripts` statt `.venv/bin`:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-`redesign-tool` und die Skripte finden `.venv` auch ohne Aktivierung.
 
 **Abhängigkeiten:**
 
@@ -61,33 +48,64 @@ Unter Windows liegt die Umgebung in `.venv\Scripts` statt `.venv/bin`:
 
 Versionen aktualisieren: `pip install -U <paket>` in der venv, Tests laufen lassen, dann die Pins in `requirements.txt` anpassen. Die venv selbst wird nie committet, sie steht in `.gitignore`.
 
-**Variante A – in einem Schritt:**
+**Variante A – Gesamtskript:**
+
+#### 1. Scraper und Generator in einem Befehl
 
 ```bash
-./redesign-tool create https://example.com --max-pages 200
+python redesign-tool.py create https://example.com --max-pages 200
 ```
 
+Liegt die Website in einem Unterordner eines fremden Hosts, mit `--scope` nur diesen Ordner erfassen. Er wird zur Wurzel `/`, alles andere auf dem Host gilt als extern:
+
 ```bash
-cd outputs/example-com-website && npm install && npm run dev
+python redesign-tool.py create https://cms.sachsen.schule/fsamzeisigwald/ --scope /fsamzeisigwald/
+```
+
+Ohne `--scope` gilt das Verzeichnis der Start-URL (bis zum letzten `/`) als Bereich. Siehe `--scope` in [scraper/README.md](scraper/README.md#benutzung).
+
+#### 2. Website lokal starten
+
+```bash
+cd outputs/example-com-website
+npm install
+npm run dev
 ```
 
 **Variante B – Module einzeln:**
 
-```bash
-.venv/bin/python -m scraper --url https://example.com --output ./outputs/example-source
-```
+#### 1. Scraper – Website als Archiv erfassen
+
+Die venv muss aktiviert sein (siehe oben).
 
 ```bash
-cd generator && npm run generate -- --source ../outputs/example-source --output ../outputs/example-website
+python -m scraper --url https://example.com --output ./outputs/example-source
 ```
 
+`--scope` funktioniert hier genauso:
+
 ```bash
-cd ../outputs/example-website && npm install && npm run dev
+python -m scraper --url https://cms.sachsen.schule/fsamzeisigwald/ --scope /fsamzeisigwald/ --output ./outputs/fsamzeisigwald-source
+```
+
+#### 2. Generator – Next.js-Projekt aus dem Archiv erzeugen
+
+```bash
+cd generator
+npm run generate -- --source ../outputs/example-source --output ../outputs/example-website
+```
+
+#### 3. Website lokal starten
+
+```bash
+cd ../outputs/example-website
+npm install
+npm run dev
 ```
 
 Danach ist die Website unter http://localhost:3000 erreichbar.
 
-**Inhalte später aktualisieren:** `redesign-tool create` einfach erneut ausführen oder `npm run sync` im Generator. Ersetzt werden nur `content/` und `public/assets/`. Komponenten, Styles und eigene Dateien bleiben erhalten.
+**Inhalte später aktualisieren:** `python redesign-tool.py create …` einfach erneut ausführen oder `npm run sync` im Generator. Ersetzt werden nur `content/` und `public/assets/`. Komponenten, Styles und eigene Dateien bleiben erhalten.
 
 ## Was erfasst wird
 
@@ -106,20 +124,24 @@ Danach ist die Website unter http://localhost:3000 erreichbar.
 
 ## Tests
 
+Jeweils aus dem Projektordner:
+
 ```bash
-cd scraper && ../.venv/bin/pytest
+cd scraper; python -m pytest
 ```
 
 ```bash
-cd generator && npm test
+cd generator; npm test
 ```
 
 ```bash
-cd generator && npm run test:e2e
+cd generator; npm run test:e2e
 ```
 
+Gesamttest (Test-Website → Scraper → Generator → Build → Browser, benötigt Playwright, siehe [generator/README.md](generator/README.md)):
+
 ```bash
-scripts/e2e-pipeline.sh
+python scripts/e2e-pipeline.py
 ```
 
 | Befehl | Was er prüft |
@@ -127,7 +149,7 @@ scripts/e2e-pipeline.sh
 | `pytest` | Unit-Tests und Crawl einer lokalen Test-Website, statisch und mit Browser |
 | `npm test` | Validierung, Import/Sync, Checks, Loader, Komponenten |
 | `npm run test:e2e` | Beispiel-Archiv → Build → Playwright |
-| `scripts/e2e-pipeline.sh` | Test-Website → Scraper → Generator → Build → Playwright |
+| `scripts/e2e-pipeline.py` | Test-Website → Scraper → Generator → Build → Playwright |
 
 ## Grenzen (v1)
 

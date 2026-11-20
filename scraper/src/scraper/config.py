@@ -15,6 +15,7 @@ class CrawlConfig:
     max_depth: int = 10
     max_pages: int = 500
     allow_domains: list[str] = field(default_factory=list)
+    scope_path: str | None = None  # None: directory of the start URL; "/" = whole host
     concurrency: int = 4
     delay: float = 0.5
     timeout: float = 30.0

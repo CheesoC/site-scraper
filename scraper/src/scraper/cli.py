@@ -24,6 +24,12 @@ def crawl_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output", required=True, type=Path, help="Ausgabeverzeichnis des Archivs")
     parser.add_argument("--max-depth", type=int, default=10, help="maximale Link-Tiefe (Standard: 10)")
     parser.add_argument("--max-pages", type=int, default=500, help="maximale Anzahl Seitenabrufe (Standard: 500)")
+    parser.add_argument(
+        "--scope",
+        metavar="PFAD",
+        help="nur Seiten unterhalb dieses Pfads erfassen; er wird im Archiv zur Wurzel '/' "
+        "(Standard: Verzeichnis der Start-URL, z. B. /schule/ bei https://host/schule/start.html; '/' = ganzer Host)",
+    )
     parser.add_argument("--allow-domain", action="append", default=[], metavar="DOMAIN", help="weitere erlaubte (Sub-)Domain, z. B. blog.example.com oder *.example.com; mehrfach möglich")
     parser.add_argument("--concurrency", type=int, default=4, help="parallele Abrufe (Standard: 4)")
     parser.add_argument("--delay", type=float, default=0.5, help="Mindestabstand pro Abruf in Sekunden (Standard: 0.5; robots.txt Crawl-delay hat Vorrang)")
@@ -47,6 +53,7 @@ def run_crawl(args: argparse.Namespace) -> int:
         max_depth=args.max_depth,
         max_pages=args.max_pages,
         allow_domains=args.allow_domain,
+        scope_path=args.scope,
         concurrency=args.concurrency,
         delay=args.delay,
         timeout=args.timeout,
@@ -67,8 +74,14 @@ async def crawl(config: CrawlConfig) -> int:
     from .urls import URLNormalizer
     from .validator import build_reports, validate_archive
 
-    normalizer = URLNormalizer(config.url, config.allow_domains, config.query_mode)
+    try:
+        normalizer = URLNormalizer(config.url, config.allow_domains, config.query_mode, config.scope_path)
+    except ValueError as exc:
+        print(f"Fehler: {exc}", file=sys.stderr)
+        return 2
     print(f"Crawle {normalizer.start_url} ({'Browser-Rendering' if config.render else 'statisch'}) …", flush=True)
+    if normalizer.scope != "/":
+        print(f"  Bereich: {normalizer.root_url} (wird zur Wurzel '/'; alles außerhalb gilt als extern)", flush=True)
     state = await PageCrawler(config, normalizer).run()
     print(f"  {len(state.pages)} Seiten erfasst, {len(state.failed)} fehlgeschlagen. Exportiere …", flush=True)
     export = await ContentExporter(config, normalizer, state).export()

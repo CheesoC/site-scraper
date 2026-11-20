@@ -74,7 +74,7 @@ def page_links(html: str, base: str, normalizer: URLNormalizer) -> list[tuple[st
 class PageCrawler:
     def __init__(self, config: CrawlConfig, normalizer: URLNormalizer | None = None):
         self.config = config
-        self.normalizer = normalizer or URLNormalizer(config.url, config.allow_domains, config.query_mode)
+        self.normalizer = normalizer or URLNormalizer(config.url, config.allow_domains, config.query_mode, config.scope_path)
         self.state = CrawlState()
         self._attempts = 0
         self._lock = asyncio.Lock()
@@ -99,6 +99,9 @@ class PageCrawler:
             async with fetcher:
                 queue: asyncio.Queue = asyncio.Queue()
                 self._enqueue(queue, self.normalizer.start_url, 0, None)
+                if self.normalizer.scope != "/":
+                    # the scope root becomes "/" in the archive, so crawl it even if the start URL is a subpage
+                    self._enqueue(queue, self.normalizer.normalize(self.normalizer.root_url) or self.normalizer.root_url, 0, None)
                 for url in self.state.discovery.urls:
                     self._enqueue(queue, url, 1, "sitemap")
                 workers = [asyncio.create_task(self._worker(queue, fetcher, delay)) for _ in range(concurrency)]

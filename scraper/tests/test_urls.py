@@ -1,3 +1,5 @@
+import pytest
+
 from scraper.urls import DirAllocator, URLNormalizer, slugify
 
 
@@ -82,6 +84,59 @@ def test_to_path():
 def test_to_path_other_allowed_host():
     n = make(allow_domains=["blog.example.com"])
     assert n.to_path("https://blog.example.com/post") == "/_/blog.example.com/post"
+
+
+SCHOOL = "https://cms.sachsen.schule/fsamzeisigwald/schule-mit-dem-foerderschwerpunkt-geistige-entwicklung.html"
+
+
+def test_scope_defaults_to_directory_of_start_url():
+    assert URLNormalizer("https://example.com/").scope == "/"
+    assert URLNormalizer("https://example.com/about.html").scope == "/"
+    assert URLNormalizer("https://example.com/schule").scope == "/"
+    assert URLNormalizer("https://example.com/schule/").scope == "/schule/"
+    n = URLNormalizer(SCHOOL)
+    assert n.scope == "/fsamzeisigwald/"
+    assert n.root_url == "https://cms.sachsen.schule/fsamzeisigwald/"
+
+
+def test_scope_limits_internal_urls_on_start_host():
+    n = URLNormalizer(SCHOOL)
+    assert n.is_internal("https://cms.sachsen.schule/fsamzeisigwald/kontakt.html")
+    assert n.is_internal("https://cms.sachsen.schule/fsamzeisigwald")
+    assert not n.is_internal("https://cms.sachsen.schule/")
+    assert not n.is_internal("https://cms.sachsen.schule/admin/datenschutz")
+    assert not n.is_internal("https://cms.sachsen.schule/fsamzeisigwald-andere/x.html")
+    assert not n.is_internal("https://cms.sachsen.schule/andereschule/index.html")
+    info = n.classify("/andereschule/index.html", SCHOOL)
+    assert info.internal is False and info.is_page is False
+    # an allow pattern covering the start host does not lift the scope
+    wide = URLNormalizer(SCHOOL, allow_domains=["*.sachsen.schule"])
+    assert not wide.is_internal("https://cms.sachsen.schule/andereschule/index.html")
+    assert wide.is_internal("https://www.sachsen.schule/")
+
+
+def test_scope_becomes_site_root():
+    n = URLNormalizer(SCHOOL)
+    assert n.to_path("https://cms.sachsen.schule/fsamzeisigwald/index.html") == "/"
+    assert n.to_path("https://cms.sachsen.schule/fsamzeisigwald") == "/"
+    assert n.to_path("https://cms.sachsen.schule/fsamzeisigwald/kontakt.html") == "/kontakt"
+    assert n.to_path(SCHOOL) == "/schule-mit-dem-foerderschwerpunkt-geistige-entwicklung"
+    assert (
+        n.to_path("https://cms.sachsen.schule/fsamzeisigwald/schule-mit-dem-foerderschwerpunkt-geistige-entwicklung/gta.html")
+        == "/schule-mit-dem-foerderschwerpunkt-geistige-entwicklung/gta"
+    )
+
+
+def test_explicit_scope():
+    whole = URLNormalizer(SCHOOL, scope_path="/")
+    assert whole.scope == "/" and whole.is_internal("https://cms.sachsen.schule/andereschule/")
+    assert whole.to_path(SCHOOL) == "/fsamzeisigwald/schule-mit-dem-foerderschwerpunkt-geistige-entwicklung"
+    assert URLNormalizer(SCHOOL, scope_path="fsamzeisigwald").scope == "/fsamzeisigwald/"
+    umlaut = URLNormalizer("https://example.com/über/start.html")
+    assert umlaut.is_internal(umlaut.normalize("https://example.com/über/kontakt.html"))
+    assert umlaut.to_path(umlaut.normalize("https://example.com/über/kontakt.html")) == "/kontakt"
+    with pytest.raises(ValueError):
+        URLNormalizer(SCHOOL, scope_path="/andereschule/")
 
 
 def test_slugify():
