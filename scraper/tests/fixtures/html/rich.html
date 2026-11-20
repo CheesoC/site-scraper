@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <title>Leistungen | Beispiel GmbH</title>
+  <meta name="description" content="Unsere Leistungen im Überblick.">
+  <meta property="og:title" content="Leistungen">
+  <meta property="og:image" content="/media/og.jpg">
+  <link rel="canonical" href="https://example.com/leistungen">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Beispiel"}</script>
+  <style>body{}</style>
+</head>
+<body>
+<div id="cookie-banner">Wir nutzen Cookies <button>OK</button></div>
+<header class="site-header">
+  <a href="/" class="logo"><img src="/media/logo.svg" alt="Beispiel Logo"></a>
+  <nav aria-label="Hauptmenü"><ul><li><a href="/">Start</a></li><li><a href="/leistungen">Leistungen</a></li></ul></nav>
+</header>
+<main>
+  <nav class="breadcrumb"><a href="/">Start</a> › Leistungen</nav>
+  <section class="hero" id="intro" style="background-image: url('/media/hero-bg.jpg')">
+    <h1>Unsere <em>Leistungen</em></h1>
+    <p>Wir bieten <strong>Webdesign</strong> und <a href="/leistungen/seo?utm_source=x#top">SEO</a>.<br>Seit 2012.</p>
+    <a class="btn btn-primary" href="/kontakt">Jetzt anfragen</a>
+  </section>
+  <section class="features">
+    <h2>Was wir tun</h2>
+    <div class="grid">
+      <div class="card"><img data-src="/media/web.png" src="data:image/gif;base64,R0lGOD" alt="Web"><h3>Webdesign</h3><p>Schnelle Websites.</p></div>
+      <div class="card"><img srcset="/media/seo-400.png 400w, /media/seo-800.png 800w" src="/media/seo-400.png" alt="SEO"><h3>SEO</h3><p>Gefunden werden.</p></div>
+      <a class="card" href="/leistungen/hosting"><h3>Hosting</h3><p>Sicher betrieben.</p></a>
+    </div>
+  </section>
+  <section>
+    <h2>Pakete</h2>
+    <table><thead><tr><th>Paket</th><th>Preis</th></tr></thead>
+      <tbody><tr><td>Start</td><td>ab <b>1.900 €</b></td></tr><tr><td colspan="2">Individuell</td></tr></tbody></table>
+    <ul>
+      <li>Analyse</li>
+      <li>Konzept<ul><li>Sitemap</li><li>Wireframes</li></ul></li>
+    </ul>
+    <figure><img src="/media/team.jpg" alt="Team"><figcaption>Unser Team</figcaption></figure>
+    <blockquote><p>Großartige Arbeit!</p><cite>Anna M.</cite></blockquote>
+    <iframe src="https://www.youtube-nocookie.com/embed/abc" title="Video"></iframe>
+    <canvas>Interaktive Grafik: Umsatz 2024</canvas>
+    <hr>
+    <pre><code class="language-js">console.log(1)</code></pre>
+  </section>
+  <section class="faq">
+    <h2>Häufige Fragen</h2>
+    <details><summary>Wie lange dauert es?</summary><p>Etwa <i>4 Wochen</i>.</p></details>
+    <details><summary>Was kostet es?</summary><p>Siehe oben.</p></details>
+  </section>
+  <section class="gallery">
+    <img src="/media/g1.jpg" alt="1"><img src="/media/g2.jpg" alt="2"><img src="/media/g3.jpg" alt="3">
+  </section>
+  <form action="/kontakt/senden" method="post">
+    <h2>Kontakt</h2>
+    <label for="n">Name</label><input id="n" name="name" required>
+    <label>E-Mail <input type="email" name="email"></label>
+    <select name="thema"><option>Web</option><option>SEO</option></select>
+    <textarea name="msg" placeholder="Ihre Nachricht"></textarea>
+    <input type="hidden" name="token" value="x">
+    <button type="submit">Senden</button>
+  </form>
+  <script>alert(1)</script>
+</main>
+<footer><nav><a href="/impressum">Impressum</a></nav></footer>
+</body>
+</html>
