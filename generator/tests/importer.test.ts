@@ -65,7 +65,7 @@ describe("sync (re-import)", () => {
     writeJson(seo, seoPage);
     manifest.pages = manifest.pages.filter((p: { path: string }) => p.path !== "/impressum");
     fs.mkdirSync(path.join(archive, "pages/blog"), { recursive: true });
-    writeJson(path.join(archive, "pages/blog/content.json"), { ...readJson(path.join(archive, "pages/impressum/content.json")), path: "/blog", title: "Blog" });
+    writeJson(path.join(archive, "pages/blog/content.json"), { ...(readJson(path.join(archive, "pages/impressum/content.json")) as object), path: "/blog", title: "Blog" });
     manifest.pages.push({ path: "/blog", content: "pages/blog/content.json", dir: "pages/blog" });
     writeJson(path.join(archive, "manifest.json"), manifest);
     const nav = readJson(path.join(archive, "navigation.json"));
