@@ -1,0 +1,40 @@
+{
+  "name": "site-generator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Erzeugt aus einem Content-Archiv (Schema v1.0) ein lauffähiges Next.js-Projekt und synchronisiert Inhalte bei erneutem Import.",
+  "type": "module",
+  "bin": {
+    "site-generator": "./bin/site-generator.mjs"
+  },
+  "scripts": {
+    "generate": "tsx src/cli.ts generate",
+    "sync": "tsx src/cli.ts sync",
+    "validate": "tsx src/cli.ts validate",
+    "check": "tsx src/cli.ts check",
+    "test": "vitest run",
+    "test:e2e": "tsx tests/e2e/run.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "tsx": "^4.23.15"
+  },
+  "devDependencies": {
+    "@types/node": "^24",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/sanitize-html": "^2.16.2",
+    "next": "^16.4.6",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sanitize-html": "^2.18.2",
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.1",
+    "zod": "^4.6.7"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}
