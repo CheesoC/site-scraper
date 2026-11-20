@@ -6,7 +6,13 @@ Der Scraper hängt nicht vom Generator ab.
 
 ## Installation
 
-Python ≥ 3.11:
+Am einfachsten über das Setup-Skript im Projektordner. Es legt `.venv` an und installiert alles:
+
+```bash
+scripts/setup.sh
+```
+
+Manuell geht es mit Python ≥ 3.11, ebenfalls im Projektordner:
 
 ```bash
 python -m venv .venv
@@ -17,14 +23,23 @@ source .venv/bin/activate
 ```
 
 ```bash
-pip install -e "./scraper[dev]"
+pip install -r scraper/requirements-dev.txt
+```
+
+```bash
+pip install -e scraper --no-deps
 ```
 
 ```bash
 playwright install chromium
 ```
 
-Der letzte Befehl wird nur für das Browser-Rendering gebraucht, den Standardmodus. Ohne Browser läuft der Scraper mit `--no-render`.
+Die Abhängigkeiten im Einzelnen:
+- `pip install -r scraper/requirements-dev.txt` installiert die gepinnten, getesteten Versionen, `requirements.txt` ohne die Testwerkzeuge.
+- `pip install -e scraper --no-deps` installiert das Paket selbst, damit `python -m scraper` funktioniert.
+- `playwright install chromium` wird nur für das Browser-Rendering gebraucht, den Standardmodus. Ohne Browser läuft der Scraper mit `--no-render`.
+
+`pyproject.toml` enthält nur Mindestversionen. Wer bewusst neuere Versionen will, nimmt `pip install -e "scraper[dev]"` und testet danach.
 
 ## Benutzung
 

@@ -22,22 +22,30 @@ Voraussetzungen: Python ≥ 3.11, Node ≥ 20.9.
 Einmalig einrichten:
 
 ```bash
-python -m venv .venv
+scripts/setup.sh
 ```
+
+Das Skript legt die Python-Umgebung `.venv/` im Projektordner an und installiert die Scraper-Abhängigkeiten in den getesteten Versionen aus `scraper/requirements-dev.txt`. Danach lädt es Chromium für das Browser-Rendering und installiert die Node-Pakete des Generators per `npm ci` nach `package-lock.json`.
+Ein erneuter Aufruf schadet nicht. Mit `--no-browser` lässt du den Chromium-Download weg. Der Scraper läuft dann nur mit `--no-render`.
+
+Für die Arbeit im Terminal die Umgebung aktivieren:
 
 ```bash
-.venv/bin/pip install -e "./scraper[dev]"
+source .venv/bin/activate
 ```
 
-```bash
-.venv/bin/playwright install chromium
-```
+`redesign-tool` und die Skripte finden `.venv` auch ohne Aktivierung.
 
-```bash
-(cd generator && npm install)
-```
+**Abhängigkeiten:**
 
-Der Chromium-Download wird nur für das Browser-Rendering gebraucht. Ohne Browser läuft der Scraper mit `--no-render`.
+| Datei | Rolle |
+|---|---|
+| `scraper/pyproject.toml` | Paketdefinition mit Mindestversionen |
+| `scraper/requirements.txt` | exakt getestete Versionen |
+| `scraper/requirements-dev.txt` | dasselbe plus pytest |
+| `generator/package-lock.json` | Node-Gegenstück zu `requirements.txt` |
+
+Versionen aktualisieren: `pip install -U <paket>` in der venv, Tests laufen lassen, dann die Pins in `requirements.txt` anpassen. Die venv selbst wird nie committet, sie steht in `.gitignore`.
 
 **Variante A – in einem Schritt:**
 
