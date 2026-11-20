@@ -71,6 +71,7 @@ class URLDiscovery:
         except Exception:
             result.crawl_delay = None
         for sitemap in parser.site_maps() or []:
+            sitemap = urljoin(self.root, sitemap.strip())
             if sitemap not in result.sitemaps:
                 result.sitemaps.append(sitemap)
 
