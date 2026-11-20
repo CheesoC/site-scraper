@@ -19,19 +19,33 @@ Website-URL ──► scraper/ (Python, Crawl4AI) ──► Content-Archiv (Sche
 
 Voraussetzungen: Python ≥ 3.11, Node ≥ 20.9.
 
-Einmalig einrichten:
+Einmalig im Projektordner einrichten:
 
 ```bash
 scripts/setup.sh
 ```
 
+Unter Windows in PowerShell (benötigt [Git for Windows](https://git-scm.com/download/win), dessen Git Bash das Skript ausführt):
+
+```powershell
+.\scripts\setup.ps1
+```
+
+Ein bloßes `scripts/setup.sh` in PowerShell öffnet ein eigenes Git-Bash-Fenster, das sich sofort wieder schließt, auch bei Fehlern. Deshalb `setup.ps1` verwenden: Es reicht alle Optionen durch und gibt die Ausgabe im aktuellen Terminal aus.
+
 Das Skript legt die Python-Umgebung `.venv/` im Projektordner an und installiert die Scraper-Abhängigkeiten in den getesteten Versionen aus `scraper/requirements-dev.txt`. Danach lädt es Chromium für das Browser-Rendering und installiert die Node-Pakete des Generators per `npm ci` nach `package-lock.json`.
-Ein erneuter Aufruf schadet nicht. Mit `--no-browser` lässt du den Chromium-Download weg. Der Scraper läuft dann nur mit `--no-render`.
+Ein erneuter Aufruf schadet nicht. Mit `--no-browser` lässt du den Chromium-Download weg. Der Scraper läuft dann nur mit `--no-render`. Mit `--no-node` überspringst du den Generator-Teil, etwa solange Node noch nicht installiert ist.
 
 Für die Arbeit im Terminal die Umgebung aktivieren:
 
 ```bash
 source .venv/bin/activate
+```
+
+Unter Windows liegt die Umgebung in `.venv\Scripts` statt `.venv/bin`:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
 ```
 
 `redesign-tool` und die Skripte finden `.venv` auch ohne Aktivierung.

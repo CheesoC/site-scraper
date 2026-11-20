@@ -23,21 +23,27 @@ for arg in "$@"; do
   esac
 done
 
+# Unter Windows (Git Bash/MSYS/Cygwin) legt venv die Programme in Scripts/ statt bin/ ab.
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*) VENV_BIN="$VENV_DIR/Scripts"; VENV_PY="$VENV_BIN/python.exe" ;;
+  *) VENV_BIN="$VENV_DIR/bin"; VENV_PY="$VENV_BIN/python" ;;
+esac
+
 echo "==> Python"
 "$PYTHON" -c 'import sys; sys.exit(0 if sys.version_info >= (3, 11) else 1)' \
   || { echo "Python >= 3.11 benötigt ($("$PYTHON" --version 2>&1))" >&2; exit 1; }
-if [[ ! -x "$VENV_DIR/bin/python" ]]; then
+if [[ ! -x "$VENV_PY" ]]; then
   echo "    venv anlegen: $VENV_DIR"
   "$PYTHON" -m venv "$VENV_DIR"
 fi
-"$VENV_DIR/bin/python" -m pip install --quiet --upgrade pip
-"$VENV_DIR/bin/python" -m pip install --quiet -r "$ROOT/scraper/requirements-dev.txt"
-"$VENV_DIR/bin/python" -m pip install --quiet --no-deps -e "$ROOT/scraper"
-echo "    $("$VENV_DIR/bin/python" -m pip show crawl4ai | grep -E '^Version' | sed 's/Version: /crawl4ai /')"
+"$VENV_PY" -m pip install --quiet --upgrade pip
+"$VENV_PY" -m pip install --quiet -r "$ROOT/scraper/requirements-dev.txt"
+"$VENV_PY" -m pip install --quiet --no-deps -e "$ROOT/scraper"
+echo "    $("$VENV_PY" -c 'from importlib.metadata import version; print("crawl4ai", version("crawl4ai"))')"
 
 if [[ $WITH_BROWSER -eq 1 ]]; then
   echo "==> Chromium für Playwright"
-  if ! "$VENV_DIR/bin/python" -m playwright install chromium; then
+  if ! "$VENV_PY" -m playwright install chromium; then
     echo "    WARNUNG: Chromium konnte nicht installiert werden. Später erneut versuchen" >&2
     echo "    oder den Scraper ohne Browser nutzen (--no-render)." >&2
   fi
@@ -58,5 +64,8 @@ if [[ $WITH_NODE -eq 1 ]]; then
 fi
 
 echo
-echo "Fertig. Aktivieren mit:  source ${VENV_DIR#$ROOT/}/bin/activate"
+echo "Fertig. Aktivieren mit:  source ${VENV_BIN#$ROOT/}/activate"
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*) ps_bin="${VENV_BIN#$ROOT/}"; echo "  (PowerShell:            .\\${ps_bin//\//\\}\\Activate.ps1)" ;;
+esac
 echo "Loslegen:                ./redesign-tool create https://example.com"
