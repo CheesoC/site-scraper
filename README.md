@@ -1,10 +1,114 @@
 # site-scraper – Website Scraper & Redesign Starter
 
-Zwei unabhängige Module mit gemeinsamer, versionierter Datenschnittstelle:
+Bestehende Websites inhaltlich möglichst vollständig erfassen und daraus automatisch ein lokal lauffähiges, redesignbares Next.js-Grundgerüst erzeugen.
 
-1. **`scraper/`** (Python, Crawl4AI): erfasst eine Website (Unterseiten, Navigation, Inhalte, Bilder, Metadaten) als standardisiertes Content-Archiv.
-2. **`generator/`** (Node/TypeScript): erzeugt aus dem Archiv ein lokal lauffähiges Next.js-Projekt als Grundlage für ein Redesign.
+```text
+Website-URL ──► scraper/ (Python, Crawl4AI) ──► Content-Archiv (Schema v1.0) ──► generator/ (Node) ──► Next.js-Projekt ──► localhost:3000 ──► Redesign
+```
 
-Die Schnittstelle ist in [`schemas/v1`](schemas/v1) definiert und in [`docs/CONTENT-SCHEMA.md`](docs/CONTENT-SCHEMA.md) beschrieben.
+| Modul | Aufgabe | Doku |
+|---|---|---|
+| [`scraper/`](scraper) | Crawling (Sitemaps, Links, JavaScript-Rendering), Navigation, Inhalte in Originalreihenfolge, Bilder, Metadaten, Prüfberichte | [scraper/README.md](scraper/README.md) |
+| [`generator/`](generator) | Archiv validieren, Next.js-Projekt aus fester Vorlage erzeugen, Inhalte später neu importieren, ohne das Design zu überschreiben | [generator/README.md](generator/README.md) |
+| [`schemas/v1/`](schemas/v1) | verbindliche Schnittstelle (JSON Schema) zwischen beiden Modulen | [docs/CONTENT-SCHEMA.md](docs/CONTENT-SCHEMA.md) |
+| [`examples/`](examples) | Beispiel-Archiv, damit der Generator ohne echten Crawl testbar ist | |
+| `outputs/` | erzeugte Archive und Websites (nicht versioniert) | |
+| [`docs/`](docs) | Gesamtplan und Modulpläne | [docs/00-GESAMTPLAN.md](docs/00-GESAMTPLAN.md) |
 
-> Work in progress – siehe [`docs/00-GESAMTPLAN.md`](docs/00-GESAMTPLAN.md).
+## Schnellstart
+
+Voraussetzungen: Python ≥ 3.11, Node ≥ 20.9.
+
+Einmalig einrichten:
+
+```bash
+python -m venv .venv
+```
+
+```bash
+.venv/bin/pip install -e "./scraper[dev]"
+```
+
+```bash
+.venv/bin/playwright install chromium
+```
+
+```bash
+(cd generator && npm install)
+```
+
+Der Chromium-Download wird nur für das Browser-Rendering gebraucht. Ohne Browser läuft der Scraper mit `--no-render`.
+
+**Variante A – in einem Schritt:**
+
+```bash
+./redesign-tool create https://example.com --max-pages 200
+```
+
+```bash
+cd outputs/example-com-website && npm install && npm run dev
+```
+
+**Variante B – Module einzeln:**
+
+```bash
+.venv/bin/python -m scraper --url https://example.com --output ./outputs/example-source
+```
+
+```bash
+cd generator && npm run generate -- --source ../outputs/example-source --output ../outputs/example-website
+```
+
+```bash
+cd ../outputs/example-website && npm install && npm run dev
+```
+
+Danach ist die Website unter http://localhost:3000 erreichbar.
+
+**Inhalte später aktualisieren:** `redesign-tool create` einfach erneut ausführen oder `npm run sync` im Generator. Ersetzt werden nur `content/` und `public/assets/`. Komponenten, Styles und eigene Dateien bleiben erhalten.
+
+## Was erfasst wird
+
+- **Seiten:** über `sitemap.xml` (auch Indizes und gz), `robots.txt` und rekursive interne Links, auch per JavaScript erzeugte.
+  - URL-Normalisierung entfernt Tracking-Parameter und Fragmente.
+  - Weiterleitungen, Canonical-URLs und Duplikate werden als Aliases geführt.
+- **Navigation:** nur echte Menüs aus dem DOM, nie „alle Links“.
+  - Hauptmenü mit Dropdowns und Mega-Menü-Gruppen, Footer-Spalten, Logo, CTA, Breadcrumbs.
+  - Ein Mobile-Menü wird nur übernommen, wenn es zusätzliche Einträge hat.
+- **Inhalte:** Sections (`hero`, `cards`, `faq`, `testimonials`, `gallery`, `cta`, `form`, `content`, `generic`) mit Blöcken in Dokumentreihenfolge: Überschriften, Rich Text (fett, kursiv, Links), Listen, Tabellen, Zitate, Bilder, Galerien, Buttons, Karten, Akkordeons, Formulare, Embeds, Code.
+  - Nicht zuordenbare Inhalte bleiben als bereinigter HTML-Fallback erhalten.
+- **Bilder:** `img`, `picture`/`srcset` (größte Variante), Lazy Loading, CSS-Hintergründe, Inline-SVG, Logo und OG-Bild.
+  - Gespeichert lokal im Originalformat, dedupliziert und der jeweiligen Seite, Section und dem Block zugeordnet.
+- **Metadaten:** Title, Description, Canonical, Sprache, H1, Open Graph, JSON-LD.
+- **Berichte:** `reports/crawl-report.json` mit dem Status `complete`, `limited` oder `errors`. Dazu Listen fehlgeschlagener URLs, defekter Links und fehlender Bilder.
+
+## Tests
+
+```bash
+cd scraper && ../.venv/bin/pytest
+```
+
+```bash
+cd generator && npm test
+```
+
+```bash
+cd generator && npm run test:e2e
+```
+
+```bash
+scripts/e2e-pipeline.sh
+```
+
+| Befehl | Was er prüft |
+|---|---|
+| `pytest` | Unit-Tests und Crawl einer lokalen Test-Website, statisch und mit Browser |
+| `npm test` | Validierung, Import/Sync, Checks, Loader, Komponenten |
+| `npm run test:e2e` | Beispiel-Archiv → Build → Playwright |
+| `scripts/e2e-pipeline.sh` | Test-Website → Scraper → Generator → Build → Playwright |
+
+## Grenzen (v1)
+
+Kein pixelgenaues Kopieren des Designs, kein Klonen von CSS/JS, keine Backend-, Shop- oder Login-Funktionen, keine Umgehung von Zugriffsbeschränkungen, keine KI-Umformulierung von Texten, kein Download großer Videos. Formulare werden dokumentiert, aber nicht angebunden.
+
+> **Rechtlicher Hinweis:** Nur Websites erfassen, für die die nötigen Rechte bestehen, z. B. die eigene Website oder die eines Kunden mit dessen Zustimmung. Texte und Bilder sind in der Regel urheberrechtlich geschützt. `robots.txt` wird beachtet.
