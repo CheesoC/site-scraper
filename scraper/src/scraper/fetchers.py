@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
+import re
 from dataclasses import dataclass
 
 import httpx
@@ -126,7 +127,7 @@ class BrowserFetcher:
         try:
             result = await self.crawler.arun(url, config=run)
         except Exception as exc:  # Playwright errors, timeouts
-            return FetchResult(url=url, final_url=url, status=None, html=None, error=f"render error: {exc}")
+            return FetchResult(url=url, final_url=url, status=None, html=None, error=f"render error: {short_error(str(exc))}")
         status = result.status_code
         final_url = result.redirected_url or result.url or url
         headers = {k.lower(): v for k, v in (result.response_headers or {}).items()}
@@ -135,9 +136,21 @@ class BrowserFetcher:
         if status is not None and status >= 400:
             return FetchResult(url, final_url, status, None, content_type, error=f"HTTP {status}")
         if html is None:
-            return FetchResult(url, final_url, status, None, content_type, error=result.error_message or "empty response")
+            return FetchResult(url, final_url, status, None, content_type, error="render error: " + short_error(result.error_message or "empty response"))
         # Crawl4AI flags near-empty pages as "blocked"; we still keep the HTML if the server answered 2xx/3xx
         return FetchResult(url, final_url, status or 200, html, content_type)
+
+
+def short_error(message: str, limit: int = 300) -> str:
+    """Crawl4AI/Playwright errors contain code context and call logs; keep the meaningful part."""
+    match = re.search(r"net::ERR_[A-Z_]+", message)
+    if match:
+        return match.group(0)
+    for line in message.splitlines():
+        line = line.strip()
+        if line and not line.lower().startswith(("unexpected error in", "error: failed on navigating")):
+            return line[:limit]
+    return message.strip()[:limit]
 
 
 async def fetch_with_retries(fetcher, url: str, retries: int, backoff: float = 1.0) -> FetchResult:
