@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import SmartLink from "@/components/SmartLink";
 import { resolveHref } from "@/lib/routes";
 import type { InlineNode } from "@/lib/schema";
@@ -28,7 +28,7 @@ function renderNode(node: InlineNode, key: number): ReactNode {
     const Tag = MARK_TAGS[mark];
     content = <Tag>{content}</Tag>;
   }
-  return <span key={key}>{content}</span>;
+  return <Fragment key={key}>{content}</Fragment>;
 }
 
 /** Inline content (text with marks, links, line breaks) exactly as extracted. */
