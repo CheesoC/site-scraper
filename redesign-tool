@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# Komfort-Befehl: Scraper + Generator in einem Schritt.
+#
+#   ./redesign-tool create https://example.com [--name example] [weitere Scraper-Optionen, z. B. --max-pages 100]
+#
+# Ergebnis: outputs/<name>-source (Archiv) und outputs/<name>-website (Next.js-Projekt).
+# Existiert die Website schon, werden nur ihre Inhalte aktualisiert (sync) – das Design bleibt erhalten.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PYTHON="${PYTHON:-}"
+if [[ -z "$PYTHON" ]]; then
+  if [[ -x "$ROOT/.venv/bin/python" ]]; then PYTHON="$ROOT/.venv/bin/python"; else PYTHON="python3"; fi
+fi
+
+usage() {
+  sed -n '2,7p' "$0" | sed 's/^# \{0,1\}//'
+  exit "${1:-0}"
+}
+
+[[ $# -ge 1 ]] || usage 1
+command="$1"; shift
+[[ "$command" == "create" ]] || { [[ "$command" == "-h" || "$command" == "--help" ]] && usage 0; echo "Unbekannter Befehl: $command"; usage 1; }
+[[ $# -ge 1 ]] || usage 1
+url="$1"; shift
+
+name=""
+scraper_args=()
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --name) name="$2"; shift 2 ;;
+    *) scraper_args+=("$1"); shift ;;
+  esac
+done
+if [[ -z "$name" ]]; then
+  name="$(echo "$url" | sed -E 's#^[a-zA-Z]+://##; s#^www\.##; s#[/:?].*$##; s#[^a-zA-Z0-9]+#-#g' | tr '[:upper:]' '[:lower:]')"
+fi
+
+source_dir="$ROOT/outputs/$name-source"
+website_dir="$ROOT/outputs/$name-website"
+
+echo "==> 1/2 Scraper: $url → outputs/$name-source"
+status=0
+(cd "$ROOT/scraper" && "$PYTHON" -m scraper --url "$url" --output "$source_dir" "${scraper_args[@]+"${scraper_args[@]}"}") || status=$?
+if [[ ! -f "$source_dir/manifest.json" ]]; then
+  echo "Scraper hat kein Archiv erzeugt (Exit $status)."; exit 1
+fi
+[[ $status -eq 0 ]] || echo "Hinweis: Der Crawl meldet Probleme – siehe outputs/$name-source/reports/. Es geht trotzdem weiter."
+
+[[ -d "$ROOT/generator/node_modules" ]] || (cd "$ROOT/generator" && npm install --no-audit --no-fund --loglevel=error)
+if [[ -f "$website_dir/.redesign-tool.json" ]]; then
+  echo "==> 2/2 Generator: Inhalte aktualisieren (sync) → outputs/$name-website"
+  (cd "$ROOT/generator" && npm run --silent sync -- --source "$source_dir" --project "$website_dir")
+else
+  echo "==> 2/2 Generator: Website erzeugen → outputs/$name-website"
+  (cd "$ROOT/generator" && npm run --silent generate -- --source "$source_dir" --output "$website_dir")
+fi
+echo
+echo "Fertig. Starten mit:"
+echo "  cd outputs/$name-website && npm install && npm run dev"
