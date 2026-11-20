@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de">
+<head><meta charset="utf-8"><title>Start | Testfirma</title><meta name="description" content="Start – Beschreibung"></head>
+<body>
+<header class="site-header">
+  <a class="logo" href="/"><img src="/img/logo.svg" alt="Testfirma Logo"></a>
+  <nav class="main-nav" aria-label="Hauptmenü">
+    <ul>
+      <li><a href="/">Start</a></li>
+      <li><a href="/leistungen/">Leistungen</a>
+        <ul class="submenu">
+          <li><a href="/leistungen/webdesign/">Webdesign</a></li>
+          <li><a href="/leistungen/seo/">SEO</a></li>
+        </ul>
+      </li>
+      <li><a href="/ueber-uns.html">Über uns</a></li>
+      <li><a href="/kontakt/">Kontakt</a></li>
+    </ul>
+  </nav>
+  <a class="btn" href="/kontakt/">Anfrage</a>
+</header>
+<main>
+<section class="hero">
+  <h1>Willkommen bei der Testfirma</h1>
+  <p>Wir machen <strong>Webdesign</strong> und <a href="/leistungen/seo/?utm_source=home">SEO</a>.</p>
+  <img src="/img/hero.png" alt="Hero">
+  <a class="btn" href="/kontakt/">Kontakt aufnehmen</a>
+</section>
+<section class="services">
+  <h2>Leistungen</h2>
+  <div class="grid">
+    <div class="card"><img src="/img/web.png" alt="Web"><h3>Webdesign</h3><p>Schöne Seiten.</p><a href="/leistungen/webdesign/">Mehr</a></div>
+    <div class="card"><img src="/img/seo.png" alt="SEO"><h3>SEO</h3><p>Gute Rankings.</p><a href="/leistungen/seo/">Mehr</a></div>
+  </div>
+</section>
+<section>
+  <h2>Links</h2>
+  <p><a href="/alt-seite">Alte Seite</a> · <a href="/fehlt/">Kaputter Link</a> · <a href="/files/flyer.pdf">Flyer (PDF)</a> · <a href="https://example.org/">Extern</a> · <a href="/index.html#top">Start mit Anker</a></p>
+  <div id="js-links"></div>
+  <script>var a=document.createElement("a");a.href="/js-seite/";a.textContent="Per JavaScript";document.getElementById("js-links").appendChild(a);</script>
+</section>
+</main>
+<footer>
+  <div><h4>Rechtliches</h4><ul><li><a href="/impressum/">Impressum</a></li><li><a href="https://example.org/datenschutz">Datenschutz extern</a></li></ul></div>
+  <p>© 2026 Testfirma</p>
+</footer>
+</body>
+</html>
