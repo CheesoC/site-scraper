@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens – the central place for a redesign.
+ * Change colors, fonts and radii here; components only use these tokens.
+ */
+@theme {
+  --color-brand: #2563eb;
+  --color-brand-contrast: #ffffff;
+  --color-ink: #111827;
+  --color-muted: #4b5563;
+  --color-surface: #ffffff;
+  --color-subtle: #f3f4f6;
+  --color-line: #e5e7eb;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --radius-card: 0.75rem;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  body {
+    @apply bg-surface text-ink font-sans antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Readable defaults for imported rich content */
+  .content-flow > * + * {
+    margin-top: 1rem;
+  }
+  .content-flow h1 { @apply text-4xl font-bold tracking-tight sm:text-5xl; }
+  .content-flow h2 { @apply mt-10 text-3xl font-semibold tracking-tight; }
+  .content-flow h3 { @apply mt-8 text-2xl font-semibold; }
+  .content-flow h4 { @apply mt-6 text-xl font-semibold; }
+  .content-flow h5, .content-flow h6 { @apply mt-6 text-lg font-semibold; }
+  .content-flow p, .content-flow li { @apply leading-relaxed; }
+  .content-flow a:not(.btn) { @apply text-brand underline underline-offset-2 hover:no-underline; }
+  .content-flow ul { @apply list-disc pl-6; }
+  .content-flow ol { @apply list-decimal pl-6; }
+  .content-flow li > ul, .content-flow li > ol { @apply mt-2; }
+  .content-flow code { @apply rounded bg-subtle px-1 py-0.5 text-sm; }
+  .content-flow pre code { @apply bg-transparent p-0; }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold no-underline transition;
+  }
+  .btn-primary { @apply bg-brand text-brand-contrast hover:opacity-90; }
+  .btn-secondary { @apply border border-line bg-surface text-ink hover:bg-subtle; }
+  .btn-link { @apply px-0 text-brand underline; }
+}
