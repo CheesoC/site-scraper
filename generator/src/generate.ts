@@ -30,6 +30,19 @@ function packageName(siteName: string | null | undefined, fallback: string): str
   return (slug || "generated-website").slice(0, 60);
 }
 
+/** Project instructions for Claude Code: fill in the facts of the scraped site (written once, on generate). */
+function fillClaudeMd(file: string, manifest: { sourceUrl?: string; crawledAt?: string | null; site?: { name?: string | null }; pages?: unknown[] }) {
+  if (!fs.existsSync(file)) return;
+  const values: Record<string, string> = {
+    SITE_NAME: manifest.site?.name || "Website",
+    SOURCE_URL: manifest.sourceUrl || "(unbekannt)",
+    CRAWLED_AT: manifest.crawledAt ? manifest.crawledAt.slice(0, 10) : "unbekannt",
+    PAGE_COUNT: String(manifest.pages?.length ?? 0),
+  };
+  const text = fs.readFileSync(file, "utf8").replace(/\{\{(\w+)\}\}/g, (match, key: string) => values[key] ?? match);
+  fs.writeFileSync(file, text);
+}
+
 export type GenerateResult = { project: string; report: ImportReport; check: CheckResult };
 
 export function generate(source: string, output: string, options: { force?: boolean } = {}): GenerateResult {
@@ -50,6 +63,7 @@ export function generate(source: string, output: string, options: { force?: bool
     const manifest = JSON.parse(fs.readFileSync(path.join(project, "content", "manifest.json"), "utf8"));
     pkg.name = packageName(manifest.site?.name, path.basename(project));
     fs.writeFileSync(pkgFile, JSON.stringify(pkg, null, 2) + "\n");
+    fillClaudeMd(path.join(project, "CLAUDE.md"), manifest);
     return { project, report, check: checkProject(project) };
   } catch (error) {
     fs.rmSync(project, { recursive: true, force: true });
