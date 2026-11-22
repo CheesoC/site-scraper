@@ -39,7 +39,7 @@ class Handler(SimpleHTTPRequestHandler):
             return True
         if path == "/sitemap.xml":
             port = self.server.server_address[1]
-            data = (SITE / "sitemap.xml").read_text().replace("PORT", str(port)).encode()
+            data = (SITE / "sitemap.xml").read_text(encoding="utf-8").replace("PORT", str(port)).encode()
             self.send_response(200)
             self.send_header("Content-Type", "application/xml")
             self.send_header("Content-Length", str(len(data)))

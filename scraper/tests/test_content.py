@@ -11,7 +11,7 @@ FIXTURE = Path(__file__).parent / "fixtures" / "html" / "rich.html"
 @pytest.fixture(scope="module")
 def page():
     extractor = ContentExtractor(URLNormalizer("https://example.com/"))
-    return extractor.extract(FIXTURE.read_text(), "https://example.com/leistungen")
+    return extractor.extract(FIXTURE.read_text(encoding="utf-8"), "https://example.com/leistungen")
 
 
 def blocks_of(page, section_type):

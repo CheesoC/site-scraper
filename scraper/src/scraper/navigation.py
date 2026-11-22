@@ -16,7 +16,7 @@ from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup, Tag
 
-from .content import BUTTON_CLASS_RE, ContentExtractor, ImageRef, class_string, collapse
+from .content import BUTTON_CLASS_RE, ContentExtractor, ImageRef, class_string, collapse, is_navigation_block
 from .urls import URLNormalizer
 
 HEADINGS = ["h1", "h2", "h3", "h4", "h5", "h6"]
@@ -67,9 +67,11 @@ class NavigationExtractor:
         header = self.find_page_header(body)
         footer = self.find_page_footer(body)
 
+        # <nav> plus menu-like containers without <nav> (e.g. <menu> or sidebar/accordion menus of CMS)
         nav_elements = [
-            el for el in body.select("nav, [role=navigation]")
-            if not BREADCRUMB_RE.search(class_string(el) + " " + str(el.get("aria-label") or ""))
+            el for el in body.find_all(True)
+            if is_navigation_block(el)
+            and not BREADCRUMB_RE.search(class_string(el) + " " + str(el.get("aria-label") or ""))
             and not (footer is not None and (el is footer or footer in el.parents))
         ]
         # outermost navigation elements only
@@ -115,7 +117,8 @@ class NavigationExtractor:
     def classify_nav(self, el: Tag, header: Tag | None) -> str:
         hints = class_string(el) + " " + str(el.get("aria-label") or "")
         for parent in list(el.parents)[:3]:
-            if isinstance(parent, Tag):
+            # <body>/<html> classes describe the page (e.g. "language-de"), not this menu
+            if isinstance(parent, Tag) and parent.name not in ("body", "html"):
                 hints += " " + class_string(parent)
         if MOBILE_HINT.search(hints):
             return "mobile"
@@ -175,6 +178,9 @@ class NavigationExtractor:
     # ----------------------------------------------------------------- menus
     def parse_menu(self, el: Tag, exclude_logo: bool = False) -> tuple[list[dict], bool]:
         lists = self.top_lists(el)
+        heads = self.heading_anchors(el, lists, exclude_logo)
+        if len(heads) >= 2:
+            return self.finalize(self.parse_grouped(el, heads, lists)), False
         if lists:
             items: list[dict] = []
             for lst in lists:
@@ -192,6 +198,42 @@ class NavigationExtractor:
                 items.append(item)
         ambiguous = el.find(class_=DROPDOWN_HINT) is not None
         return self.finalize(items), ambiguous
+
+    def heading_anchors(self, el: Tag, lists: list[Tag], exclude_logo: bool) -> list[Tag]:
+        """Links inside headings/<summary> outside of lists - the entries of accordion and sidebar menus."""
+        out = []
+        for a in el.find_all("a", href=True):
+            if any(lst in a.parents for lst in lists) or (exclude_logo and self.is_logo_anchor(a)):
+                continue
+            holder = a.find_parent(HEADINGS + ["summary"])
+            if holder is not None and el in holder.parents:
+                out.append(a)
+        return out
+
+    def parse_grouped(self, el: Tag, heads: list[Tag], lists: list[Tag]) -> list[dict]:
+        """Menu of heading links, each optionally followed by a list of sub pages:
+
+            <h3><a href="/projekte">Projekte</a></h3> <div><ul><li><a href="/projekte/a">A</a></li></ul></div>
+
+        A list belongs to the heading link directly before it; lists without one become top-level items.
+        """
+        head_ids = {id(a) for a in heads}
+        list_ids = {id(lst) for lst in lists}
+        items: list[dict] = []
+        last: dict | None = None
+        for node in el.descendants:
+            if id(node) in head_ids:
+                last = self.item_from_anchor(node)
+                if last:
+                    items.append(last)
+            elif id(node) in list_ids:
+                sub_items = self.parse_list(node)
+                if last is not None and not last["children"]:
+                    last["children"] = sub_items
+                else:
+                    items.extend(sub_items)
+                last = None
+        return items
 
     @staticmethod
     def top_lists(el: Tag) -> list[Tag]:
@@ -467,6 +509,49 @@ def _signature(items: list[dict]) -> str:
     return json.dumps(simplify(items), ensure_ascii=False)
 
 
+def _key(item: dict) -> tuple:
+    return (item["label"], item["path"] or item["url"])
+
+
+def _same_menu(a: list[dict], b: list[dict]) -> bool:
+    """Two variants of one menu: (almost) the same top-level entries, only the opened sub menus differ."""
+    keys_a, keys_b = {_key(i) for i in a}, {_key(i) for i in b}
+    return bool(keys_a) and len(keys_a & keys_b) / len(keys_a | keys_b) >= 0.8
+
+
+def _parent_of(level: list[dict], items: list[dict]) -> dict | None:
+    """Item in `items` (any depth) whose sub list contains all top-level entries of `level`."""
+    keys = {_key(i) for i in level}
+    if not keys:
+        return None
+    for item in NavigationExtractor.flatten(items):
+        if keys <= {_key(c) for c in item["children"]}:
+            return item
+    return None
+
+
+def _merge_children(target: list[dict], source: list[dict]) -> None:
+    """Add the sub items of `source` that `target` lacks (recursively, keeping target's order)."""
+    by_key = {_key(i): i for i in target}
+    for item in source:
+        match = by_key.get(_key(item))
+        if match is None:
+            continue
+        known = {_key(c) for c in match["children"]}
+        for child in item["children"]:
+            if _key(child) not in known:
+                match["children"].append(copy.deepcopy(child))
+        _merge_children(match["children"], item["children"])
+
+
+def _renumber(items: list[dict], depth: int = 0) -> list[dict]:
+    for order, item in enumerate(items):
+        item["order"] = order
+        item["depth"] = depth
+        _renumber(item["children"], depth + 1)
+    return items
+
+
 class NavigationAggregator:
     """Collects per-page navigation and builds the site-wide navigation.json."""
 
@@ -501,8 +586,43 @@ class NavigationAggregator:
             return None
         return self.menus[max(keys, key=lambda k: (self.counts[k], -self.order.index(k)))]
 
+    def merged_main(self) -> tuple[dict | None, set, tuple | None]:
+        """Most common main menu, completed with the sub menus other pages show.
+
+        Sidebar/accordion menus differ from page to page: they open only the branch of the current
+        page, or show only the level of the current page (its siblings). Variants that are the sub list
+        of an item in another variant are deeper levels and are hung in there; variants with (almost)
+        the same top level are merged. Returns the menu, the merged variant keys and the chosen key.
+        """
+        keys = [k for k in self.order if k[0] == "main"]
+        if not keys:
+            return None, set(), None
+        levels = {k for k in keys if any(w != k and _parent_of(self.menus[k]["items"], self.menus[w]["items"]) for w in keys)}
+        roots = [k for k in keys if k not in levels] or keys
+        root = max(roots, key=lambda k: (self.counts[k], -self.order.index(k)))
+        main = self.menus[root]
+        items = copy.deepcopy(main["items"])
+        merged = set()
+        for key in roots:
+            if key != root and _same_menu(main["items"], self.menus[key]["items"]):
+                _merge_children(items, self.menus[key]["items"])
+                merged.add(key)
+        pending = [k for k in keys if k in levels]
+        while pending:  # deeper levels may need their parent level merged first
+            progress = False
+            for key in list(pending):
+                parent = _parent_of(self.menus[key]["items"], items)
+                if parent is not None:
+                    _merge_children(parent["children"], self.menus[key]["items"])
+                    merged.add(key)
+                    pending.remove(key)
+                    progress = True
+            if not progress:
+                break
+        return {**main, "items": _renumber(items)}, merged, root
+
     def build(self) -> tuple[dict, ImageRef | None]:
-        main = self.best("main")
+        main, merged, main_key = self.merged_main()
         footer = self.best("footer")
         desktop_entries = {
             (i["label"], i["path"] or i["url"])
@@ -513,6 +633,10 @@ class NavigationAggregator:
         menus = []
         for key in self.order:
             menu = self.menus[key]
+            if key in merged:
+                continue  # variant of the main menu, already part of it
+            if key == main_key:
+                menu = main
             if menu["type"] == "mobile":
                 entries = {(i["label"], i["path"] or i["url"]) for i in NavigationExtractor.flatten(menu["items"])}
                 if entries <= desktop_entries:

@@ -15,7 +15,7 @@ def tree(items):
 @pytest.fixture(scope="module")
 def nav():
     extractor = NavigationExtractor(URLNormalizer("https://example.com/"))
-    return extractor.extract(FIXTURE.read_text(), "https://example.com/leistungen/seo")
+    return extractor.extract(FIXTURE.read_text(encoding="utf-8"), "https://example.com/leistungen/seo")
 
 
 def menu(nav, menu_type):

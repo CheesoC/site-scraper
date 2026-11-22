@@ -81,7 +81,7 @@ python -m scraper validate ./outputs/example-source
 4. **URLNormalizer** (`urls.py`) erzeugt normalisierte URLs und Seitenpfade (`/leistungen/seo`). Daraus macht er lesbare, kollisionsfreie Verzeichnisse. Er legt auch den Bereich (`scope`) fest: Auf dem Start-Host gelten nur URLs unterhalb des Bereichs als intern, und der Bereich wird im Seitenpfad zu `/`.
 5. **NavigationExtractor** (`navigation.py`) liest echte Navigation aus dem DOM: `header`, `nav`, `footer`, verschachtelte Listen, Mega-Menü-Gruppen, Logo, CTA und Breadcrumbs (auch aus JSON-LD).
    - Menüs ohne erkennbare Listenstruktur mit Dropdown-Elementen bekommen `ambiguous: true`.
-   - Über alle Seiten hinweg gewinnt die häufigste Variante.
+   - Über alle Seiten hinweg gewinnt die häufigste Variante. Seitenleisten- und Akkordeon-Menüs ohne `<nav>` (z. B. `<menu>` oder Container mit „menu“/„sidebar“ in Klasse oder ID, überwiegend Links) zählen ebenfalls als Navigation. Zeigen sie pro Seite nur den aktuellen Zweig oder nur die aktuelle Ebene, werden die Varianten zu einem vollständigen Menü zusammengeführt. Navigation landet nie im Seiteninhalt.
    - Ein Mobile-Menü bleibt nur erhalten, wenn es zusätzliche Einträge enthält.
 6. **ContentExtractor** (`content.py`) bestimmt den Hauptbereich und zerlegt ihn in Sections (`hero`, `cards`, `faq`, …) und Blöcke in Dokumentreihenfolge. Fett, kursiv und Links bleiben als Rich Text erhalten. Nicht zuordenbare Elemente werden zu bereinigten `html`-Fallback-Blöcken (`sanitize.py`).
 7. **AssetDownloader** (`assets.py`) lädt Bilder in Originalqualität herunter: `srcset` (größte Variante), Lazy-Attribute, `picture`, CSS-Hintergründe, Inline-SVG, Data-URIs, Logo und OG-Bild.

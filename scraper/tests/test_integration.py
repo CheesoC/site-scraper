@@ -72,7 +72,7 @@ def check_archive(output, expect_js_page: bool):
     broken = {b["path"] for b in load(output, "reports/broken-links.json")["items"]}
     assert "/fehlt" in broken
     assert any(i["type"] == "document" and i["url"].endswith("flyer.pdf") for i in report["issues"])
-    assert (output / "pages/index/content.md").read_text().startswith("<!-- section:")
+    assert (output / "pages/index/content.md").read_text(encoding="utf-8").startswith("<!-- section:")
     assert (output / "pages/index/original.html").exists()
 
 

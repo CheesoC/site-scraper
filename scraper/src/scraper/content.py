@@ -132,6 +132,31 @@ def class_string(el: Tag) -> str:
     return " ".join(classes) + " " + str(el.get("id") or "")
 
 
+NAV_HINT_RE = re.compile(
+    r"(^|[\s_-])(nav|navi|navigation|menu|menue|accordion|sidebar|sidenav|side-nav|subnav|sub-nav)([\s_-]|$)", re.IGNORECASE
+)
+
+
+def is_navigation_block(tag: Tag) -> bool:
+    """<nav>/[role=navigation], or a <menu>/menu-like container (id/class hint) that consists mostly of links.
+
+    Catches sidebar and accordion menus that CMS render without <nav>; the link-density check keeps
+    content such as FAQ accordions or teaser boxes out.
+    """
+    if tag.name == "nav" or tag.get("role") == "navigation":
+        return True
+    if tag.name != "menu" and not NAV_HINT_RE.search(class_string(tag)):
+        return False
+    if tag.name in ("a", "li", "body", "html", "main", "article"):
+        return False
+    labels = [collapse(a.get_text(" ")).strip() for a in tag.find_all("a", href=True)]
+    labels = [label for label in labels if label]
+    if len(labels) < 3:
+        return False
+    text = len(collapse(tag.get_text(" ")).strip())
+    return text > 0 and sum(len(label) for label in labels) / text >= 0.6
+
+
 def plain_text(nodes: list[dict]) -> str:
     out = []
     for node in nodes:
@@ -270,6 +295,10 @@ class ContentExtractor:
                 continue
             if self.should_skip(tag):
                 tag.decompose()
+        # navigation never belongs to the content - remove it before measuring where the content is
+        for tag in list(body.find_all(True)):
+            if not tag.decomposed and is_navigation_block(tag):
+                tag.decompose()
         main = body.find("main") or body.find(attrs={"role": "main"})
         if main is None:
             articles = body.find_all("article")
@@ -283,8 +312,6 @@ class ContentExtractor:
                     # only page-level header/footer, not <header> of an article/section
                     if tag.find_parent(["article", "section", "main"]) is None:
                         tag.decompose()
-        for tag in main.select("nav, [role=navigation]"):
-            tag.decompose()
         for tag in main.find_all(class_=BREADCRUMB_RE):
             tag.decompose()
         return main
